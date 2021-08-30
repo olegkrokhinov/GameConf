@@ -1,12 +1,11 @@
 import { Button, Grid, makeStyles, TextField}from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
-import urljoin from 'url-join';
 import { getItemFromDb, saveItemToDb} from '../itemFetch';
 import ItemImage from '../ItemImage';
 import SaveIcon from '@material-ui/icons/Save';
 import ItemActionHeader from '../ItemActionHeader';
 
-const URL_HOME = "http://localhost:4000/";
+//const URL_HOME = "http://localhost:4000/";
 
 const useStyles = makeStyles((theme) => ({
   textField:{
@@ -29,8 +28,7 @@ export default function EditItem(props) {
     .then (item => {
       setItemName(item.name);
       setItemDescription(item.description);
-      setItemUploadedImagePath(urljoin(URL_HOME, item.imageUploadPath));
-      //console.log(itemUploadedImagePath)
+      setItemUploadedImagePath(item.imageUploadPath);
     })
     .catch(err => {
     
@@ -50,7 +48,6 @@ export default function EditItem(props) {
     saveItemToDb(props.selectedItemId, itemName, itemDescription, localImageFile)
     .then((item)=>{
      props.setItemlistModifyed((value)=>(!value));
-      props.setItemAction('view');
     })
     .catch(error => {
       setSaveItemResultMessage('Save item catch error: '+ error.message);

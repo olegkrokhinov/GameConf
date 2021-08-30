@@ -34,7 +34,7 @@ export default function AddItem(props) {
     .then((item)=>{
       props.setItemlistModifyed((value)=>(!value));
       props.setSelectedItemId(item._id);
-      props.setItemAction('view');
+      props.setItemAction('edit');
     })
     .catch(error => {
       setSaveItemResultMessage('Save item catch error: '+ error.message);

@@ -1,9 +1,6 @@
 import { Avatar, Grid, makeStyles, Typography} from '@material-ui/core';
 
-import React, { useState } from 'react';
-import urljoin from 'url-join';
-
-const URL_HOME = "http://localhost:4000/";
+import React, { useEffect, useState } from 'react';
 
 const useStyles = makeStyles((theme)=>({
   selectedItem: {
@@ -19,45 +16,34 @@ const useStyles = makeStyles((theme)=>({
   }
 }));
 
-export default function ItemListElement(props){
+export default function Item(props){
 
   const classes = useStyles();
   const [mouseOver, setMouseOver] = useState(false); 
-
-  function itemIsEditing(){
-    return ((itemSelected()) && (props.itemAction === 'edit'))
-  }
+  const [selected, setSelected] = useState(false);
   
-  function itemSelected(){
-    return ( props.selectedItemId === props.item._id )
-  }
+  useEffect(()=> {
+    setSelected((props.selectedItemId === props.item._id));
+  }, [props.selectedItemId, props.item._id]);
 
-  function handleView(event) {
-    if ( !itemIsEditing() ) {
-      props.setSelectedItemId(props.item._id);
-      props.setItemAction('view');
-    }
-  }
-
-  function handleEdit(event) {
+  function handleClick(event) {
     props.setSelectedItemId(props.item._id);
     props.setItemAction('edit');
   }
 
   return (
     <Grid item container 
-      onDoubleClick={handleEdit} 
-      onClick={handleView}  
+      onClick={handleClick}  
       onMouseEnter={() => setMouseOver(true)}
       onMouseLeave ={() => setMouseOver(false)}
-      className={(itemSelected()||(mouseOver))? classes.selectedItem : ''}>
+      className={(selected||(mouseOver))? classes.selectedItem : ''}>
 
       <Grid item>
         <Avatar
           className={classes.avatar}
           variant='rounded'
           alt= ''
-          src={urljoin(URL_HOME, props.item.imageUploadPath)} 
+          src={props.item.imageUploadPath} 
         >
           Empty
         </Avatar>

@@ -1,5 +1,5 @@
 
-const URL_AUTH = "http://localhost:4000/auth/";
+const URL_AUTH = "auth/";
 
 const saveToLocalStorage = true; 
 

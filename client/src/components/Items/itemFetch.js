@@ -1,6 +1,6 @@
 
 import {authenticatedUser} from '../../userAuth'
-const URL_ITEMS = "http://localhost:4000/items/";
+const URL_ITEMS = "items/";
 
 export function addItemToDb(itemName, itemDescription, itemLocalImageFile){    
   const formData = new FormData();
