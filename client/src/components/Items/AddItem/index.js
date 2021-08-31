@@ -1,29 +1,28 @@
 import { Button, Grid, makeStyles, TextField } from '@material-ui/core';
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { addItemToDb } from '../itemFetch';
 import ItemImage from '../ItemImage';
 import SaveIcon from '@material-ui/icons/Save';
-import ItemActionHeader from '../ItemActionHeader';
 
 const useStyles = makeStyles((theme) => ({
-  textField:{
+  textField: {
     width: '50ch',
   }
 }));
 
-export default function AddItem(props) {
-  
-  const [itemName, setItemName] = useState(''); 
-  const [itemDescription, setItemDescription] = useState(''); 
-  const [localImageFile, setLocalImageFile] = useState(''); 
-  const [saveItemResultMessage, setSaveItemResultMessage] = useState(''); 
+export default function AddItem({ setSelectedItemId, setItemAction, setItemListNeedUpdate }) {
 
-  const classes = useStyles();  
- 
+  const [itemName, setItemName] = useState('');
+  const [itemDescription, setItemDescription] = useState('');
+  const [localImageFile, setLocalImageFile] = useState('');
+  const [saveItemResultMessage, setSaveItemResultMessage] = useState('');
+
+  const classes = useStyles();
+
   function handleNameChange(event) {
     setItemName(event.target.value);
   }
-  
+
   function handleDescriptionChange(event) {
     setItemDescription(event.target.value);
   }
@@ -31,31 +30,26 @@ export default function AddItem(props) {
   function handleSubmit(event) {
     event.preventDefault();
     addItemToDb(itemName, itemDescription, localImageFile)
-    .then((item)=>{
-      props.setItemlistModifyed((value)=>(!value));
-      props.setSelectedItemId(item._id);
-      props.setItemAction('edit');
-    })
-    .catch(error => {
-      setSaveItemResultMessage('Save item catch error: '+ error.message);
-    })
+      .then((item) => {
+        setSelectedItemId(item._id);
+        setItemListNeedUpdate(true);
+        setItemAction('edit');
+      })
+      .catch(error => {
+        setSaveItemResultMessage('Save item catch error: ' + error.message);
+      })
   }
 
   return (
     <>
-      <Grid container 
-        spacing={3}  
+      <Grid item container
+        spacing={3}
         direction="column"
         justifyContent="flex-start"
         alignItems="stretch"
       >
+
         <Grid item>
-          <ItemActionHeader {...props}
-            itemName='New item'
-            itemDescription=''
-          />
-        </Grid>
-        <Grid item>  
           <TextField
             className={classes.textField}
             id="item-name"
@@ -65,7 +59,7 @@ export default function AddItem(props) {
             onChange={handleNameChange}
             variant="outlined"
             size="small"
-          />            
+          />
         </Grid>
 
         <Grid item>
@@ -80,22 +74,22 @@ export default function AddItem(props) {
             onChange={handleDescriptionChange}
             variant="outlined"
             size="small"
-          />            
+          />
         </Grid>
 
         <Grid item>
-          <ItemImage {...props} itemUploadedImagePath='' setLocalImageFile={setLocalImageFile}/>
-        </Grid>      
+          <ItemImage itemUploadedImagePath='' setLocalImageFile={setLocalImageFile} />
+        </Grid>
 
-          <Grid item>
+        <Grid item>
           <Button startIcon={<SaveIcon />} onClick={handleSubmit} variant="outlined">
             Save
           </Button>
         </Grid>
 
-      </Grid>     
-      
-      {saveItemResultMessage &&  
+      </Grid>
+
+      {saveItemResultMessage &&
         <div>
           {saveItemResultMessage}
         </div>
@@ -103,8 +97,7 @@ export default function AddItem(props) {
 
     </>
   );
-  
+
 };
 
 
- 

@@ -1,81 +1,70 @@
 import { Grid, IconButton, makeStyles, Menu, MenuItem, Typography } from '@material-ui/core';
-import MoreVert  from '@material-ui/icons/MoreVert';
+import MoreVert from '@material-ui/icons/MoreVert';
 import React, { useState } from 'react';
-import { deleteItemFromDb } from '../itemFetch';
 
 const useStyles = makeStyles((theme) => (
-{
-  btn: {
-    minWidth: 50,
-    maxWidth: 50,
-  },
-  content: {
-    marginLeft: theme.spacing(1),
-  }
-  ,
-  itemActionHeader: {
-    height: 70,
-    backgroundColor: '#e8eaf6'
-  }
-}));
+  {
+    btn: {
+      minWidth: 50,
+      maxWidth: 50,
+    },
+    content: {
+      marginLeft: theme.spacing(1),
+    }
+    ,
+    itemActionHeader: {
+      height: 70,
+      backgroundColor: '#e8eaf6'
+    }
+  }));
 
-export default function ItemActionHeader (props) {
+export default function ItemActionHeader({ item, itemAction, handleDeleteItem }) {
 
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl)
-  
+
   function handleMenuOpen(event) {
     setAnchorEl(event.target)
   }
 
-  function handleMenuClose(event){
-      setAnchorEl(null);
+  function handleMenuClose(event) {
+    setAnchorEl(null);
   }
 
-  function handleEdit(event) {
-    setAnchorEl(null);
-    props.setItemAction('edit');
-  }
 
   function handleDelete(event) {
     setAnchorEl(null);
-    deleteItemFromDb(props.selectedItemId)
-      .then(() => {
-        props.setItemlistModifyed((value) => (!value));
-        props.setSelectedItemId('');
-        props.setItemAction('')
-      })
-      .catch()
+    handleDeleteItem();
   }
 
   return (
     <>
-      <Grid container className={classes.itemActionHeader}>
-        
+      <Grid item container className={classes.itemActionHeader}>
+
         <Grid item container xs direction='column' alignContent='flex-start' justifyContent='center'>
           <Grid item className={classes.content}>
             <Typography variant='h6'>
-              {props.itemName}
+              {item ? item.name : 'New item'}
             </Typography>
           </Grid>
           <Grid item className={classes.content}>
             <Typography >
-              {props.itemDescription}
+              {item?.description}
             </Typography>
           </Grid>
         </Grid>
-        
+
         <Grid item className={classes.btn} container alignContent='center'>
-          {((props.itemAction === 'edit') || (props.itemAction === 'view')) &&
+          {(itemAction === 'edit') &&
             <IconButton aria-label="item actions menu" onClick={handleMenuOpen}>
-              <MoreVert id='menu-icon'/>
+              <MoreVert id='menu-icon' />
             </IconButton>
           }
         </Grid>
       </Grid>
-    
+
       <Menu
         anchorEl={anchorEl}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -85,11 +74,8 @@ export default function ItemActionHeader (props) {
         open={isMenuOpen}
         onClose={handleMenuClose}
       >
-        {(props.itemAction==='view')&&
-          <MenuItem onClick={handleEdit}>Edit</MenuItem>
-        }
         <MenuItem onClick={handleDelete}>Delete</MenuItem>
-      </Menu>  
+      </Menu>
     </>
   )
 };

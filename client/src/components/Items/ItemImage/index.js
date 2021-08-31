@@ -1,7 +1,7 @@
 
 import { Button, makeStyles } from '@material-ui/core';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
     height: 450,
     borderRadius: 5,
   },
-  btn:{
+  btn: {
     position: 'absolute',
     top: '200px',
     left: '160px',
@@ -23,43 +23,43 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-export default function ItemImage(props) {
+export default function ItemImage({ imageUploadPath, setLocalImageFile, onlyImage }) {
 
   const classes = useStyles();
-  const [itemImagePreviewUrl, setItemImagePreviewUrl] = useState(); 
-  
+  const [itemImagePreviewUrl, setItemImagePreviewUrl] = useState();
+
   function handleItemImageChange(event) {
     if (event.target.files && event.target.files[0]) {
       let file = event.target.files[0];
-      props.setLocalImageFile(file);
+      setLocalImageFile(file);
       setItemImagePreviewUrl(URL.createObjectURL(file));
     }
   };
 
-  useEffect(()=>{
-    setItemImagePreviewUrl(props.itemUploadedImagePath);
-  },[props.itemUploadedImagePath]);
+  useEffect(() => {
+    setItemImagePreviewUrl(imageUploadPath);
+  }, [imageUploadPath]);
 
   return (
     <div className={classes.root}>
-      <img src={itemImagePreviewUrl} alt = '' className={classes.img}></img>
-      {!props.onlyImage && 
+      <img src={itemImagePreviewUrl} alt='' className={classes.img}></img>
+      {!onlyImage &&
         <>
-          <input accept="image/*" className={classes.input} id="button-file" type="file" onChange={handleItemImageChange}/>
+          <input accept="image/*" className={classes.input} id="button-file" type="file" onChange={handleItemImageChange} />
           <label htmlFor="button-file">
-            <Button startIcon={<PhotoCamera />} 
-                    size="small" 
-                    variant="contained"
-                    aria-label="button-file" 
-                    className={classes.btn}
-                    component="span"
+            <Button startIcon={<PhotoCamera />}
+              size="small"
+              variant="contained"
+              aria-label="button-file"
+              className={classes.btn}
+              component="span"
             >
               Upload image
             </Button>
           </label>
         </>
-      } 
-  </div>
+      }
+    </div>
   );
-  
+
 };

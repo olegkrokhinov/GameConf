@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import {login as authLogin } from '../userAuth.js';
- 
+import { login as authLogin } from '../userAuth.js';
+
 export default function UserLogin(props) {
-  
-  const [login, setLogin] = useState(''); 
-  const [password, setPassword] = useState(''); 
-  const [loginResultMessage, setLoginResultMessage] = useState(''); 
-  
+
+  const [login, setLogin] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginResultMessage, setLoginResultMessage] = useState('');
+
   function handleLoginChange(event) {
     setLogin(event.target.value);
   }
-  
+
   function handlePasswordChange(event) {
     setPassword(event.target.value);
   }
@@ -18,12 +18,12 @@ export default function UserLogin(props) {
   function handleSubmit(event) {
     event.preventDefault();
     authLogin(login, password)
-    .then((user)=>{
-      props.history.push("/");
-    })
-    .catch(error => {
-      setLoginResultMessage('UserLogin catch error: '+ error.message);
-    })
+      .then((user) => {
+        props.history.push("/");
+      })
+      .catch(error => {
+        setLoginResultMessage('UserLogin catch error: ' + error.message);
+      })
   }
 
   return (
@@ -36,17 +36,16 @@ export default function UserLogin(props) {
         <input value={password} onChange={handlePasswordChange} />
         <input type="submit" value="Sign in" />
 
-        {loginResultMessage && ( 
-            <div>
-              {loginResultMessage}
-            </div>
+        {loginResultMessage && (
+          <div>
+            {loginResultMessage}
+          </div>
         )}
 
       </form>
     </div>
   );
-  
+
 };
 
 
- 

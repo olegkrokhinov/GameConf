@@ -5,7 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import EditItem from './EditItem';
 import AddItem from './AddItem';
-import { getItemsList } from './itemFetch';
+import { getItemListFromDb, getItemFromDb, deleteItemFromDb } from './itemFetch';
+import ItemActionHeader from './ItemActionHeader';
 
 const useStyles = makeStyles((theme) => (
   {
@@ -35,56 +36,61 @@ const useStyles = makeStyles((theme) => (
 
 export default function Items({ ...props }) {
   const [list, setList] = useState([]);
-  const [itemListModifyed, setItemlistModifyed] = useState(true);
+  const [itemListNeedUpdate, setItemListNeedUpdate] = useState(true);
   const [selectedItemId, setSelectedItemId] = useState('');
   const [itemAction, setItemAction] = useState('');
+  const [selectedItem, setSelectedItem] = useState(null)
 
   const classes = useStyles();
 
   useEffect(() => {
-    getItemsList()
+    (itemListNeedUpdate) && getItemListFromDb()
       .then(list => {
         setList(list);
+        setItemListNeedUpdate(false);
       })
-      .catch(err => err.message)
-  }, [itemListModifyed]);
+      .catch(err => err.message);
+  }, [itemListNeedUpdate]);
+
+  useEffect(() => {
+    if (itemAction === 'add') {
+
+    } else {
+      getItemFromDb(selectedItemId)
+        .then(item => setSelectedItem(item))
+        .catch(err => { })
+    }
+  }, [selectedItemId]);
+
+  function handleDeleteItem() {
+    deleteItemFromDb(selectedItem.current._id)
+      .then(() => {
+        setItemListNeedUpdate(true);
+        setSelectedItemId('');
+        setItemAction('')
+      })
+      .catch()
+  }
 
   const handleAddItem = (event) => {
-    setSelectedItemId('');
     setItemAction('add');
+    setSelectedItemId('');
+    setSelectedItem(null);
+
   };
   const handleRefreshItemsList = (event) => {
-    setItemlistModifyed((value) => !value);
+    setItemListNeedUpdate(true);
   };
 
   return (
     <>
       <div className={classes.root}>
-        <Grid container
-          spacing={1}
-          direction='row'
-          alignItems='stretch'
-        >
-          <Grid item container
-            direction='column'
-            className={classes.itemsLeft}
-            alignItems='flex-start'
-          >
-            <Grid item
-              container
-              direction='column'
-              alignItems='stretch'
-              className={classes.itemsList}
-            >
-              
-              {list.map( (item, index)=>
-                <Item {...props}
-                  key={index}
-                  item={item}
-                  selectedItemId={selectedItemId}
-                  setSelectedItemId={setSelectedItemId}
-                  setItemAction={setItemAction}
-                />
+        <Grid container spacing={1} direction='row' alignItems='stretch'>
+          <Grid item container direction='column' className={classes.itemsLeft} alignItems='flex-start'          >
+            <Grid item container direction='column' alignItems='stretch' className={classes.itemsList}            >
+
+              {list.map((item, index) =>
+                <Item key={index} item={item} selectedItemId={selectedItemId} setSelectedItemId={setSelectedItemId} setItemAction={setItemAction} />
               )}
             </Grid>
 
@@ -103,19 +109,24 @@ export default function Items({ ...props }) {
 
           </Grid>
 
-          <Grid item xs className={classes.action}>
+          <Grid item container xs className={classes.action}>
+
+            <ItemActionHeader
+              item={selectedItem}
+              handleDeleteItem={handleDeleteItem}
+            />
 
             {(itemAction === 'add') &&
-              <AddItem  {...props}
+              <AddItem
                 setSelectedItemId={setSelectedItemId}
-                setItemlistModifyed={setItemlistModifyed}
+                setItemListNeedUpdate={setItemListNeedUpdate}
                 setItemAction={setItemAction}
               />
             }
             {(itemAction === 'edit') &&
-              <EditItem {...props}
-                selectedItemId={selectedItemId}
-                setItemlistModifyed={setItemlistModifyed}
+              <EditItem
+                item={selectedItem}
+                setItemListNeedUpdate={setItemListNeedUpdate}
               />
             }
 
