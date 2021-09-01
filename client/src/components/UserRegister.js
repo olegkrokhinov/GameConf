@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { register } from '../userAuth.js'
+import React, { useState } from "react";
+import { register } from "../userAuth.js";
 
 export default function UserRegister(props) {
-
-  const [login, setLogin] = useState('');
-  const [password, setPassword] = useState('');
-  const [registerResultMessage, setRegisterResultMessage] = useState('');
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const [registerResultMessage, setRegisterResultMessage] = useState("");
   const [registered, setRegistered] = useState(false);
 
   function handleLoginChange(event) {
@@ -20,21 +19,22 @@ export default function UserRegister(props) {
     event.preventDefault();
     register(login, password)
       .then((json) => {
-        setRegisterResultMessage('User registered successfuly!');
+        setRegisterResultMessage("User registered successfuly!");
         setRegistered(true);
       })
-      .catch(error => {
-        setRegisterResultMessage('UserRegisuserRegisterVars.ter catch error: ' + error.message);
+      .catch((error) => {
+        setRegisterResultMessage("UserRegister catch error: " + error.message);
         setRegistered(false);
-      })
+      });
   }
 
   return (
     <div>
-      <div><h3>UserRegister</h3></div>
+      <div>
+        <h3>UserRegister</h3>
+      </div>
       <form onSubmit={handleSubmit}>
-
-        {!registered &&
+        {!registered && (
           <div>
             <label>Login:</label>
             <input value={login} onChange={handleLoginChange} />
@@ -42,26 +42,12 @@ export default function UserRegister(props) {
             <input value={password} onChange={handlePasswordChange} />
             <input type="submit" value="Sign up" />
           </div>
-        }
-
-        {registerResultMessage && (
-
-          ((registered) &&
-            <div>
-              {registerResultMessage}
-            </div>)
-
-          ||
-
-          ((!registered) &&
-            <div>
-              {registerResultMessage}
-            </div>)
-
         )}
 
+        {registerResultMessage &&
+          ((registered && <div>{registerResultMessage}</div>) ||
+            (!registered && <div>{registerResultMessage}</div>))}
       </form>
     </div>
   );
 }
-

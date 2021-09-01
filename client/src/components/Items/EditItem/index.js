@@ -1,24 +1,23 @@
-import { Button, Grid, makeStyles, TextField } from '@material-ui/core';
-import React, { useState } from 'react';
-import { saveItemToDb } from '../itemFetch';
-import ItemImage from '../ItemImage';
-import SaveIcon from '@material-ui/icons/Save';
+import { Button, Grid, makeStyles, TextField } from "@material-ui/core";
+import React, { useState } from "react";
+import { saveItemToDb } from "../itemFetch";
+import ItemImage from "../ItemImage";
+import SaveIcon from "@material-ui/icons/Save";
 
 const useStyles = makeStyles((theme) => ({
   textField: {
-    width: '50ch',
-  }
+    width: "50ch",
+  },
 }));
 
 export default function EditItem({ item, setItemlistNeedUpdate }) {
-
   const classes = useStyles();
 
   const [itemName, setItemName] = useState(item?.name);
   const [itemDescription, setItemDescription] = useState(item?.description);
 
-  const [localImageFile, setLocalImageFile] = useState('');
-  const [saveItemResultMessage, setSaveItemResultMessage] = useState('');
+  const [localImageFile, setLocalImageFile] = useState("");
+  const [saveItemResultMessage, setSaveItemResultMessage] = useState("");
 
   function handleNameChange(event) {
     setItemName(event.target.value);
@@ -34,21 +33,21 @@ export default function EditItem({ item, setItemlistNeedUpdate }) {
       .then((item) => {
         setItemlistNeedUpdate(true);
       })
-      .catch(error => {
-        setSaveItemResultMessage('Save item catch error: ' + error.message);
-      })
+      .catch((error) => {
+        setSaveItemResultMessage("Save item catch error: " + error.message);
+      });
   }
 
   return (
     <>
-
-      <Grid item container
+      <Grid
+        item
+        container
         spacing={3}
         direction="column"
         justifyContent="flex-start"
         alignItems="stretch"
       >
-
         <Grid item>
           <TextField
             className={classes.textField}
@@ -78,25 +77,24 @@ export default function EditItem({ item, setItemlistNeedUpdate }) {
         </Grid>
 
         <Grid item>
-          <ItemImage imageUploadPath={item?.imageUploadPath} setLocalImageFile={setLocalImageFile} />
+          <ItemImage
+            imageUploadPath={item?.imageUploadPath}
+            setLocalImageFile={setLocalImageFile}
+          />
         </Grid>
 
         <Grid item>
-          <Button startIcon={<SaveIcon />} onClick={handleSubmit} variant="outlined" >
+          <Button
+            startIcon={<SaveIcon />}
+            onClick={handleSubmit}
+            variant="outlined"
+          >
             Save
           </Button>
         </Grid>
-
       </Grid>
 
-      {saveItemResultMessage &&
-        <div>
-          {saveItemResultMessage}
-        </div>
-      }
+      {saveItemResultMessage && <div>{saveItemResultMessage}</div>}
     </>
   );
-
-};
-
-
+}
