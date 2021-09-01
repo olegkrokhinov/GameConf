@@ -10,20 +10,32 @@ exports.refresh = function(req, res){
         return res.status(404).send({ message: "User Not found." });
       } 
   
-  let jwtAccessToken = jwt.sign(
-      {userId: req.user._id}, 
-      secret, 
-      {expiresIn: '1h'}
-  );
+    userModel.findOne({ _id: req.user._id })
+    .populate("roles")
+    .exec()
+    .then(user => {
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+      
+      let jwtAccessToken = jwt.sign(
+        { userId: user._id },
+        secret,
+        { expiresIn: '1h' }
+      );
 
-  res.status(200).send({
-        userId: req.user._id,
-        userName: req.user.name,
-        userLogin: req.user.login,
-        userRoles: req.user.roles,
-        userAccessToken: 'Bearer '+ jwtAccessToken
+      res.status(200).send({
+        userId: user._id,
+        userName: user.name,
+        userLogin: user.login,
+        userRoles: user.roles,
+        userAccessToken: 'Bearer ' + jwtAccessToken
       });
-
+    })
+    .catch(err => {
+      return res.status(500).send({ message: err.message });
+    })
+  
 }
 
 exports.login = function(req, res) {
