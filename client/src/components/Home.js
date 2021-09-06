@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 
-import { authenticatedUser } from "../userAuth";
+import { authUser } from "../userAuth";
 import {
-  addListenerToUserIsAuthentificated,
-  removeListenerFromUserIsAuthentificated,
+  addAuthStateListener,
+  removeAuthStateListener,
 } from "../userAuth";
 
 export default function Home(...props) {
   const [userIsAuthenticated, setUserIsAuthenticated] = useState(
-    Boolean(authenticatedUser?.userAccessToken)
+    Boolean(authUser?.userAccessToken)
   );
   console.log(userIsAuthenticated);
-  addListenerToUserIsAuthentificated(setUserIsAuthenticated);
+  addAuthStateListener(setUserIsAuthenticated);
 
   useEffect(() => {
     return () => {
-      removeListenerFromUserIsAuthentificated(setUserIsAuthenticated);
+      removeAuthStateListener(setUserIsAuthenticated);
     };
   }, []);
 
@@ -24,9 +24,9 @@ export default function Home(...props) {
       <h3>Home page</h3>
       {userIsAuthenticated && (
         <div>
-          <div>Hello, {authenticatedUser.userLogin}!</div>
+          <div>Hello, {authUser.userLogin}!</div>
           <div>User roles: </div>
-          {authenticatedUser.userRoles.map((role, index) => {
+          {authUser.userRoles.map((role, index) => {
             return <div key={index}>{role.name}</div>;
           })}
         </div>

@@ -11,31 +11,31 @@ export const authUser = {
 let tokenRefreshTimerDelta = 60000;
 let tokenRefreshTimerId = "";
 
-let userIsAuthListeners = [];
+let authListeners = [];
 
 loadUserFromLocalStorage();
 refreshAccessTokenFromServer(true);
 
-export function addListenerToUserIsAuthentificated(listenerCallback) {
-  userIsAuthListeners.push(listenerCallback);
+export function addAuthStateListener(listener) {
+  authListeners.push(listener);
 }
 
-export function removeListenerFromUserIsAuthentificated(listenerCallback) {
-  let index = userIsAuthListeners.indexOf(listenerCallback);
+export function removeAuthStateListener(listener) {
+  let index = authListeners.indexOf(listener);
   if (index > -1) {
-    userIsAuthListeners.splice(index, 1);
+    authListeners.splice(index, 1);
   }
 }
 
-function notifyListenersUserIsAuthenticated(authenticated) {
-  userIsAuthListeners.forEach((listener) => listener(authenticated));
+function setAuthState(authenticated) {
+  authListeners.forEach((listener) => listener(authenticated));
 }
 
 export function loadUserFromLocalStorage() {
   let user = JSON.parse(localStorage.getItem("user"));
   if (user && !tokenHasExpired(user.userAccessToken)) {
     Object.assign(authUser, user);
-    notifyListenersUserIsAuthenticated(true);
+    setAuthState(true);
     return;
   }
   resetUser();
@@ -48,7 +48,7 @@ function saveUserToLocalStorage(user) {
 }
 
 function resetUser() {
-  notifyListenersUserIsAuthenticated(false);
+  setAuthState(false);
   Object.assign(authUser, {});
   localStorage.removeItem("user");
   clearTimeout(tokenRefreshTimerId);
@@ -102,7 +102,7 @@ export function refreshAccessTokenFromServer(autoupdate = false) {
         .then((user) => {
           saveUserToLocalStorage(user);
           Object.assign(authUser, user);
-          notifyListenersUserIsAuthenticated(true);
+          setAuthState(true);
 
           if (autoupdate) {
             startTokenRefreshTimer();
@@ -164,7 +164,7 @@ function postUser(authPath, authBody, saveToLocalStorage = false) {
       .then((user) => {
         saveToLocalStorage && saveUserToLocalStorage(user);
         Object.assign(authUser, user);
-        notifyListenersUserIsAuthenticated(true);
+        setAuthState(true);
         startTokenRefreshTimer();
         resolve(user);
       })

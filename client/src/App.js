@@ -24,8 +24,8 @@ import UserRegister from "./components/UserRegister.js";
 
 import {
   logOut,
-  authenticatedUser,
-  addListenerToUserIsAuthentificated,
+  authUser,
+  addAuthStateListener,
 } from "./userAuth.js";
 
 const useStyles = makeStyles((theme) => ({
@@ -45,10 +45,10 @@ export default function App() {
   const [drawer, setDrawer] = useState(false);
   const [appBarTitle, setAppBarTitle] = useState("Game");
   const [userIsAuthenticated, setUserIsAuthenticated] = useState(
-    Boolean(authenticatedUser?.userAccessToken)
+    Boolean(authUser?.userAccessToken)
   );
 
-  addListenerToUserIsAuthentificated(setUserIsAuthenticated);
+  addAuthStateListener(setUserIsAuthenticated);
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
