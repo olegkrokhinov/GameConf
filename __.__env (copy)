@@ -1,0 +1,3 @@
+DB_URI="mongodb+srv://NodeSrvUser:4Z0obn1sdzoC13qU@cluster0.arqzx.mongodb.net/NodeSrvDB?retryWrites=true&w=majority"
+PORT=4000
+SECRET="node secret key"

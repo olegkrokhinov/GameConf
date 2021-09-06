@@ -1,6 +1,6 @@
 const URL_AUTH = "auth/";
 
-export const authenticatedUser = {
+export const authUser = {
   // userid: '',
   // userName: '',
   // userLogin: '',
@@ -11,30 +11,30 @@ export const authenticatedUser = {
 let tokenRefreshTimerDelta = 60000;
 let tokenRefreshTimerId = "";
 
-let userIsAuthentificatedListeners = [];
+let userIsAuthListeners = [];
 
 loadUserFromLocalStorage();
 refreshAccessTokenFromServer(true);
 
 export function addListenerToUserIsAuthentificated(listenerCallback) {
-  userIsAuthentificatedListeners.push(listenerCallback);
+  userIsAuthListeners.push(listenerCallback);
 }
 
 export function removeListenerFromUserIsAuthentificated(listenerCallback) {
-  let index = userIsAuthentificatedListeners.indexOf(listenerCallback);
+  let index = userIsAuthListeners.indexOf(listenerCallback);
   if (index > -1) {
-    userIsAuthentificatedListeners.splice(index, 1);
+    userIsAuthListeners.splice(index, 1);
   }
 }
 
 function notifyListenersUserIsAuthenticated(authenticated) {
-  userIsAuthentificatedListeners.forEach((listener) => listener(authenticated));
+  userIsAuthListeners.forEach((listener) => listener(authenticated));
 }
 
 export function loadUserFromLocalStorage() {
   let user = JSON.parse(localStorage.getItem("user"));
   if (user && !tokenHasExpired(user.userAccessToken)) {
-    Object.assign(authenticatedUser, user);
+    Object.assign(authUser, user);
     notifyListenersUserIsAuthenticated(true);
     return;
   }
@@ -49,7 +49,7 @@ function saveUserToLocalStorage(user) {
 
 function resetUser() {
   notifyListenersUserIsAuthenticated(false);
-  Object.assign(authenticatedUser, {});
+  Object.assign(authUser, {});
   localStorage.removeItem("user");
   clearTimeout(tokenRefreshTimerId);
 }
@@ -77,7 +77,7 @@ export function logOut() {
       body: "",
       headers: {
         "Content-Type": "application/json",
-        Authorization: authenticatedUser.userAccessToken,
+        Authorization: authUser.userAccessToken,
       },
     })
       .then(() => {
@@ -89,19 +89,19 @@ export function logOut() {
 }
 
 export function refreshAccessTokenFromServer(autoupdate = false) {
-  if (!tokenHasExpired(authenticatedUser.userAccessToken)) {
+  if (!tokenHasExpired(authUser.userAccessToken)) {
     return new Promise((resolve, reject) => {
       fetch(URL_AUTH + "refresh", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: authenticatedUser.userAccessToken,
+          Authorization: authUser.userAccessToken,
         },
       })
         .then((res) => res.json())
         .then((user) => {
           saveUserToLocalStorage(user);
-          Object.assign(authenticatedUser, user);
+          Object.assign(authUser, user);
           notifyListenersUserIsAuthenticated(true);
 
           if (autoupdate) {
@@ -146,7 +146,7 @@ function startTokenRefreshTimer() {
   clearTimeout(tokenRefreshTimerId);
   tokenRefreshTimerId = setTimeout(
     () => refreshAccessTokenFromServer(true),
-    getTokenExpiresAfter(authenticatedUser.userAccessToken) -
+    getTokenExpiresAfter(authUser.userAccessToken) -
       tokenRefreshTimerDelta
   );
 }
@@ -163,7 +163,7 @@ function postUser(authPath, authBody, saveToLocalStorage = false) {
       .then((res) => res.json())
       .then((user) => {
         saveToLocalStorage && saveUserToLocalStorage(user);
-        Object.assign(authenticatedUser, user);
+        Object.assign(authUser, user);
         notifyListenersUserIsAuthenticated(true);
         startTokenRefreshTimer();
         resolve(user);
