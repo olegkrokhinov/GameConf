@@ -15,9 +15,9 @@ app.use(express.urlencoded({ extended: true }));
 
 require('./api/auth/passport')(app)
 require('./appRoutes')(app);
-mongoose.connect(process.env.DB_URI, {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(process.env.DB_URI_PROD, {useNewUrlParser: true, useUnifiedTopology: true})
 .then(()=> {
-  app.listen(process.env.PORT, function(){
+  app.listen(process.env.PORT, function () {
     console.log(`Waiting for connections at port ${process.env.PORT}...`);
   });
 })

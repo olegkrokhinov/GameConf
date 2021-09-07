@@ -1,16 +1,10 @@
-FROM node:12-alpine as builder
-WORKDIR /app
-COPY package.json /app/package.json
-RUN apk --no-cache add --virtual builds-deps build-base python
-RUN npm install
-COPY . /app
-RUN npm run build
 FROM node:12-alpine
-WORKDIR /app
-COPY --from=builder /app/dist /app
-COPY package.json /app/package.json
-RUN apk --no-cache add --virtual builds-deps build-base python
-RUN npm install --only=prod
+WORKDIR /usr/src/app
+COPY package.json ./
+RUN npm install
+#RUN npm install --only=prod
+COPY . ./
+RUN ls ./api/auth/
 EXPOSE 4000 
 USER node
-CMD ["node", "index.js"]
+CMD ["node", "app.js"]

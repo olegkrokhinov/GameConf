@@ -1,4 +1,4 @@
-import { authenticatedUser } from "../../userAuth";
+import { authUser } from "../../userAuth";
 const URL_ITEMS = "items/";
 
 export function addItemToDb(itemName, itemDescription, itemLocalImageFile) {
@@ -11,7 +11,7 @@ export function addItemToDb(itemName, itemDescription, itemLocalImageFile) {
     method: "POST",
     body: formData,
     headers: {
-      Authorization: authenticatedUser.userAccessToken,
+      Authorization: authUser.userAccessToken,
     },
   };
 
@@ -36,7 +36,7 @@ export function saveItemToDb(
     method: "PUT",
     body: formData,
     headers: {
-      Authorization: authenticatedUser.userAccessToken,
+      Authorization: authUser.userAccessToken,
     },
   };
   return fetchItem(options);
@@ -46,7 +46,7 @@ export function getItemFromDb(itemId) {
   const options = {
     method: "GET",
     headers: {
-      Authorization: authenticatedUser.userAccessToken,
+      Authorization: authUser.userAccessToken,
     },
   };
   return fetchItem(options, itemId);
@@ -55,7 +55,7 @@ export function getItemFromDb(itemId) {
 export function deleteItemFromDb(itemId) {
   const options = {
     method: "DELETE",
-    headers: { Authorization: authenticatedUser.userAccessToken },
+    headers: { Authorization: authUser.userAccessToken },
   };
   return fetchItem(options, itemId);
 }
@@ -63,7 +63,7 @@ export function deleteItemFromDb(itemId) {
 export function getItemListFromDb() {
   const options = {
     method: "GET",
-    headers: { Authorization: authenticatedUser.userAccessToken },
+    headers: { Authorization: authUser.userAccessToken },
   };
   return fetchItem(options);
 }
