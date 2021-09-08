@@ -1,16 +1,22 @@
 import { Button, Grid, makeStyles, TextField } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { saveItemToDb } from "../itemFetch";
 import ItemImage from "../ItemImage";
 import SaveIcon from "@material-ui/icons/Save";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    paddingTop: 16,
+  },
   textField: {
     width: "50ch",
   },
 }));
 
-export default function EditItem({ item, setItemlistNeedUpdate }) {
+export default function EditItem({
+  item,
+  setItemListNeedUpdate
+}) {
   const classes = useStyles();
 
   const [itemName, setItemName] = useState(item?.name);
@@ -18,6 +24,11 @@ export default function EditItem({ item, setItemlistNeedUpdate }) {
 
   const [localImageFile, setLocalImageFile] = useState("");
   const [saveItemResultMessage, setSaveItemResultMessage] = useState("");
+
+  useEffect(() => {
+    setItemName(item?.name);
+    setItemDescription(item?.description);
+  }, [item]);
 
   function handleNameChange(event) {
     setItemName(event.target.value);
@@ -31,7 +42,8 @@ export default function EditItem({ item, setItemlistNeedUpdate }) {
     event.preventDefault();
     saveItemToDb(item._id, itemName, itemDescription, localImageFile)
       .then((item) => {
-        setItemlistNeedUpdate(true);
+        setItemListNeedUpdate(true)
+        setSaveItemResultMessage("Item saved successfully!");
       })
       .catch((error) => {
         setSaveItemResultMessage("Save item catch error: " + error.message);
@@ -47,6 +59,7 @@ export default function EditItem({ item, setItemlistNeedUpdate }) {
         direction="column"
         justifyContent="flex-start"
         alignItems="stretch"
+        className={classes.root}
       >
         <Grid item>
           <TextField

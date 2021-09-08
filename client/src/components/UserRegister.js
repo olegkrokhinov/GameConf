@@ -45,8 +45,8 @@ export default function UserRegister(props) {
         )}
 
         {registerResultMessage &&
-          ((registered && <div>{registerResultMessage}</div>) ||
-            (!registered && <div>{registerResultMessage}</div>))}
+          <div>{registerResultMessage}</div>
+        }
       </form>
     </div>
   );

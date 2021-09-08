@@ -65,7 +65,7 @@ export default function Items({ ...props }) {
   }, [selectedItemId]);
 
   function handleDeleteItem() {
-    deleteItemFromDb(selectedItem.current._id)
+    deleteItemFromDb(selectedItem._id)
       .then(() => {
         setItemListNeedUpdate(true);
         setSelectedItemId("");
@@ -134,9 +134,14 @@ export default function Items({ ...props }) {
             </Grid>
           </Grid>
 
-          <Grid item container xs className={classes.action}>
+          <Grid item container xs className={classes.action}
+            direction="column"
+            justifyContent="flex-start"
+            alignItems="stretch"
+          >  
             <ItemActionHeader
               item={selectedItem}
+              itemAction={itemAction}
               handleDeleteItem={handleDeleteItem}
             />
 

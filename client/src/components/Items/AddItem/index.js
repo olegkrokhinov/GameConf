@@ -5,12 +5,19 @@ import ItemImage from '../ItemImage';
 import SaveIcon from '@material-ui/icons/Save';
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    paddingTop: 16,
+  },
   textField: {
     width: '50ch',
   }
 }));
 
-export default function AddItem({ setSelectedItemId, setItemAction, setItemListNeedUpdate }) {
+export default function AddItem({
+  setSelectedItemId,
+  setItemAction,
+  setItemListNeedUpdate
+}) {
 
   const [itemName, setItemName] = useState('');
   const [itemDescription, setItemDescription] = useState('');
@@ -47,6 +54,7 @@ export default function AddItem({ setSelectedItemId, setItemAction, setItemListN
         direction="column"
         justifyContent="flex-start"
         alignItems="stretch"
+        className={classes.root}
       >
 
         <Grid item>

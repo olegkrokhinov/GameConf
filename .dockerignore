@@ -4,3 +4,4 @@ client
 .git
 *Dockerfile*
 *docker-compose*
+.env

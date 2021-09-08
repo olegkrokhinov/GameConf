@@ -43,7 +43,7 @@ export default function ItemActionHeader({ item, itemAction, handleDeleteItem })
     <>
       <Grid item container className={classes.itemActionHeader}>
 
-        <Grid item container xs direction='column' alignContent='flex-start' justifyContent='center'>
+        <Grid item xs container direction='column' alignContent='flex-start' justifyContent='center'>
           <Grid item className={classes.content}>
             <Typography variant='h6'>
               {item ? item.name : 'New item'}

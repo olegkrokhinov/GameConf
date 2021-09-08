@@ -5,19 +5,24 @@ const app = express();
 const mongoose = require('mongoose');
 const fileUpload = require('express-fileupload');
  
-//const passport = require('passport');
 app.use(fileUpload());
-
 app.use('/images/items', express.static(`${__dirname}/images/items`));
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 require('./api/auth/passport')(app)
 require('./appRoutes')(app);
-mongoose.connect(process.env.DB_URI_PROD, {useNewUrlParser: true, useUnifiedTopology: true})
+
+
+db_uri = process.env.DB_URI ?
+  process.env.DB_URI : 'mongodb://gameconf-db:27017/gameconf';
+
+port = process.env.PORT ?
+  process.env.PORT : 8080;
+
+mongoose.connect(db_uri, { useNewUrlParser: true, useUnifiedTopology: true })
 .then(()=> {
-  app.listen(process.env.PORT, function () {
+  app.listen(port, function () {
     console.log(`Waiting for connections at port ${process.env.PORT}...`);
   });
 })

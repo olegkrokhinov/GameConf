@@ -1,11 +1,15 @@
-const URL_AUTH = "auth/";
+import {
+  HOST
+} from './config'
+
+const URL_AUTH = "/auth";
 
 export const authUser = {
-  // userid: '',
-  // userName: '',
-  // userLogin: '',
-  // userRoles: [],
-  // userAccessToken: ''
+  userid: '',
+  userName: '',
+  userLogin: '',
+  userRoles: [],
+  userAccessToken: ''
 };
 
 let tokenRefreshTimerDelta = 60000;
@@ -59,7 +63,26 @@ export function login(userLogin, userPassword) {
     userLogin: userLogin,
     userPassword: userPassword,
   };
-  return postUser("login", body, true);
+  
+  return new Promise((resolve, reject) => {
+    fetch(HOST + URL_AUTH + '/login', {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((user) => {
+        saveUserToLocalStorage(user);
+        Object.assign(authUser, user);
+        setAuthState(true);
+        startTokenRefreshTimer();
+        resolve(user);
+      })
+      .catch(reject);
+  });
+
 }
 
 export function register(userLogin, userPassword) {
@@ -67,19 +90,33 @@ export function register(userLogin, userPassword) {
     userLogin: userLogin,
     userPassword: userPassword,
   };
-  return postUser("signup", body);
+
+  return new Promise((resolve, reject) => {
+    fetch(HOST + URL_AUTH + '/signup', {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((user) => {
+        resolve(user);
+      })
+      .catch(reject);
+  });
 }
 
 export function logOut() {
   return new Promise((resolve, reject) => {
-    fetch(URL_AUTH + "logout", {
-      method: "POST",
-      body: "",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: authUser.userAccessToken,
-      },
-    })
+    fetch(HOST + URL_AUTH + "/logout", {
+        method: "POST",
+        body: "",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authUser.userAccessToken,
+        },
+      })
       .then(() => {
         resetUser();
         resolve();
@@ -91,13 +128,13 @@ export function logOut() {
 export function refreshAccessTokenFromServer(autoupdate = false) {
   if (!tokenHasExpired(authUser.userAccessToken)) {
     return new Promise((resolve, reject) => {
-      fetch(URL_AUTH + "refresh", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: authUser.userAccessToken,
-        },
-      })
+      fetch(HOST + URL_AUTH + "/refresh", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: authUser.userAccessToken,
+          },
+        })
         .then((res) => res.json())
         .then((user) => {
           saveUserToLocalStorage(user);
@@ -118,7 +155,9 @@ function tokenHasExpired(jwtToken) {
   if (jwtToken) {
     try {
       const [, payload] = jwtToken.split(".");
-      const { exp: expires } = JSON.parse(window.atob(payload));
+      const {
+        exp: expires
+      } = JSON.parse(window.atob(payload));
       if (typeof expires === "number") {
         return Date.now() > expires * 1000;
       }
@@ -131,7 +170,9 @@ function getTokenExpiresAfter(jwtToken) {
   if (jwtToken) {
     try {
       const [, payload] = jwtToken.split(".");
-      const { exp: expires } = JSON.parse(window.atob(payload));
+      const {
+        exp: expires
+      } = JSON.parse(window.atob(payload));
       if (typeof expires === "number") {
         if (Date.now() < expires * 1000) {
           return expires * 1000 - Date.now();
@@ -147,27 +188,6 @@ function startTokenRefreshTimer() {
   tokenRefreshTimerId = setTimeout(
     () => refreshAccessTokenFromServer(true),
     getTokenExpiresAfter(authUser.userAccessToken) -
-      tokenRefreshTimerDelta
+    tokenRefreshTimerDelta
   );
-}
-
-function postUser(authPath, authBody, saveToLocalStorage = false) {
-  return new Promise((resolve, reject) => {
-    fetch(URL_AUTH + authPath, {
-      method: "POST",
-      body: JSON.stringify(authBody),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((user) => {
-        saveToLocalStorage && saveUserToLocalStorage(user);
-        Object.assign(authUser, user);
-        setAuthState(true);
-        startTokenRefreshTimer();
-        resolve(user);
-      })
-      .catch(reject);
-  });
 }

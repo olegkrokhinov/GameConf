@@ -2,6 +2,8 @@ import { Button, makeStyles } from "@material-ui/core";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import React, { useState, useEffect } from "react";
 
+import { HOST } from '../../../config';
+
 const useStyles = makeStyles(() => ({
   root: {
     position: "relative",
@@ -39,7 +41,7 @@ export default function ItemImage({
   }
 
   useEffect(() => {
-    setItemImagePreviewUrl(imageUploadPath);
+    setItemImagePreviewUrl(HOST+imageUploadPath);
   }, [imageUploadPath]);
 
   return (

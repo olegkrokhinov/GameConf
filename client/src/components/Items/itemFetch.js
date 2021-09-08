@@ -1,5 +1,10 @@
-import { authUser } from "../../userAuth";
-const URL_ITEMS = "items/";
+import {
+  authUser
+} from "../../userAuth";
+import {
+  HOST
+} from '../../config'
+const URL_ITEMS = "/items";
 
 export function addItemToDb(itemName, itemDescription, itemLocalImageFile) {
   const formData = new FormData();
@@ -14,7 +19,7 @@ export function addItemToDb(itemName, itemDescription, itemLocalImageFile) {
       Authorization: authUser.userAccessToken,
     },
   };
-
+  console.log(authUser.userAccessToken)
   return fetchItem(options);
 }
 
@@ -55,7 +60,9 @@ export function getItemFromDb(itemId) {
 export function deleteItemFromDb(itemId) {
   const options = {
     method: "DELETE",
-    headers: { Authorization: authUser.userAccessToken },
+    headers: {
+      Authorization: authUser.userAccessToken
+    },
   };
   return fetchItem(options, itemId);
 }
@@ -63,16 +70,21 @@ export function deleteItemFromDb(itemId) {
 export function getItemListFromDb() {
   const options = {
     method: "GET",
-    headers: { Authorization: authUser.userAccessToken },
+    headers: {
+      Authorization: authUser.userAccessToken
+    },
   };
   return fetchItem(options);
 }
 
 function fetchItem(options, itemId = "") {
   return new Promise((resolve, reject) => {
-    fetch(URL_ITEMS + itemId, options)
+    
+    fetch(HOST + URL_ITEMS + '/' + itemId, options)
       .then((res) => checkHtppError(res))
-      .then((res) => res.json())
+      .then((res) => {
+        return res.json()
+      })
       .then((json) => resolve(json))
       .catch(reject);
   });

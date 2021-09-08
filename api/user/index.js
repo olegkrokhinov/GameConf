@@ -1,4 +1,4 @@
-const express =  require('express');
+const express = require('express');
 const router = express.Router();
 const userModel = require('./userModel');
 const controller = require('./userController')
@@ -6,7 +6,9 @@ const controller = require('./userController')
 const passport = require('passport');
 const auth = require('../auth/auth.js')
 
-checkAccessTokenAndUserRole = [passport.authenticate('jwt', {session: false}), auth.isUser];
+checkAccessTokenAndUserRole = [passport.authenticate('jwt', {
+    session: false
+}), auth.isUser];
 
 
 router.get('/', checkAccessTokenAndUserRole, controller.getUsers);

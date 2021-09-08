@@ -2,7 +2,7 @@ const userModel = require("../user/userModel");
 const roleModel = require("../user/roleModel");
 const jwt = require("jsonwebtoken");
 bcrypt = require("bcrypt");
-const secret = process.env.SECRET;
+const secret = process.env.SECRET ? process.env.SECRET: 'secret';
 
 exports.refresh = function (req, res) {
   if (!req.user) {
@@ -36,11 +36,17 @@ exports.refresh = function (req, res) {
 };
 
 exports.login = function (req, res) {
+  console.log('*******************************');
+  console.log('login');
+  console.log('*******************************');
   userModel
     .findOne({ login: req.body.userLogin })
     .populate("roles")
     .exec()
     .then((user) => {
+      console.log('*******************************');
+      console.log(user);
+      console.log('*******************************');
       if (!user) {
         return res.status(404).send({ message: "User Not found." });
       }
@@ -54,7 +60,7 @@ exports.login = function (req, res) {
       let jwtAccessToken = jwt.sign({ userId: user._id }, secret, {
         expiresIn: "1h",
       });
-
+      
       res.status(200).send({
         userId: user._id,
         userName: user.name,
@@ -64,6 +70,9 @@ exports.login = function (req, res) {
       });
     })
     .catch((err) => {
+      console.log('*******************************');
+      console.log('catch');
+      console.log('*******************************');
       return res.status(500).send({ message: err.message });
     });
 };

@@ -1,6 +1,7 @@
 import { Avatar, Grid, makeStyles, Typography } from "@material-ui/core";
-
 import React, { useEffect, useState } from "react";
+
+import { HOST } from '../../../config';
 
 const useStyles = makeStyles((theme) => ({
   selectedItem: {
@@ -52,7 +53,7 @@ export default function Item({
       <Grid item>
         <Avatar
           className={classes.avatar}
-          src={item.imageUploadPath}
+          src={HOST + item.imageUploadPath}
           variant="rounded"
           alt=""
         >

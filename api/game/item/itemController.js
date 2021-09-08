@@ -10,7 +10,9 @@ function saveImage(reqfiles){
     imageFile = reqfiles.itemLocalImageFile;
     console.log(imageFile);
     realUploadPath = path.join(appDir, '/images/items/', imageFile.name);
+    console.log('********************************************** '+realUploadPath)
     uploadPath = path.posix.join(path.posix.sep, '/images/items/', imageFile.name);
+    console.log('********************************************** ' + uploadPath)
     imageFile.mv(realUploadPath, err => {
       if (err) {
         //return res.status(500).send(err);
