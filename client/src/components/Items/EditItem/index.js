@@ -19,11 +19,11 @@ export default function EditItem({
 }) {
   const classes = useStyles();
 
-  const [itemName, setItemName] = useState(item?.name);
-  const [itemDescription, setItemDescription] = useState(item?.description);
+  const [itemName, setItemName] = useState('');
+  const [itemDescription, setItemDescription] = useState('');
 
-  const [localImageFile, setLocalImageFile] = useState("");
-  const [saveItemResultMessage, setSaveItemResultMessage] = useState("");
+  const [localImageFile, setLocalImageFile] = useState('');
+  const [saveItemResultMessage, setSaveItemResultMessage] = useState('');
 
   useEffect(() => {
     setItemName(item?.name);

@@ -38,9 +38,10 @@ export default function AddItem({
     event.preventDefault();
     addItemToDb(itemName, itemDescription, localImageFile)
       .then((item) => {
+        setItemAction('edit');
         setSelectedItemId(item._id);
         setItemListNeedUpdate(true);
-        setItemAction('edit');
+        
       })
       .catch(error => {
         setSaveItemResultMessage('Save item catch error: ' + error.message);
