@@ -74,6 +74,7 @@ export function login(userLogin, userPassword) {
     })
       .then((res) => res.json())
       .then((user) => {
+        console.log(user)
         saveUserToLocalStorage(user);
         Object.assign(authUser, user);
         setAuthState(true);
@@ -101,6 +102,7 @@ export function register(userLogin, userPassword) {
     })
       .then((res) => res.json())
       .then((user) => {
+        console.log(user)
         resolve(user);
       })
       .catch(reject);

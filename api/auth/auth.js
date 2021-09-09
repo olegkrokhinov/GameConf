@@ -13,7 +13,7 @@ exports.isUser = (req, res, next) => {
   return isRole('user', req, res, next);
 };
 
-isRole = (role, req, res, next) => {
+const isRole = (role, req, res, next) => {
   
   const user = req.user;
   

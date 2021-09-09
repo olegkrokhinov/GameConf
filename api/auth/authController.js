@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 bcrypt = require("bcrypt");
 const secret = process.env.SECRET ? process.env.SECRET: 'secret';
 
-exports.refresh = function (req, res) {
+exports.refreshToken = function (req, res) {
   if (!req.user) {
     return res.status(404).send({ message: "User Not found." });
   }
@@ -36,17 +36,14 @@ exports.refresh = function (req, res) {
 };
 
 exports.login = function (req, res) {
-  console.log('*******************************');
-  console.log('login');
-  console.log('*******************************');
+  //console.log('login *******************************');
   userModel
     .findOne({ login: req.body.userLogin })
     .populate("roles")
     .exec()
     .then((user) => {
-      console.log('*******************************');
-      console.log(user);
-      console.log('*******************************');
+      //console.log('login then *******************************');
+      //console.log(user );
       if (!user) {
         return res.status(404).send({ message: "User Not found." });
       }
@@ -70,9 +67,8 @@ exports.login = function (req, res) {
       });
     })
     .catch((err) => {
-      console.log('*******************************');
-      console.log('catch');
-      console.log('*******************************');
+      //console.log('login catch *******************************');
+      //console.log(err)
       return res.status(500).send({ message: err.message });
     });
 };
@@ -82,6 +78,7 @@ exports.logout = function (req, res) {
 };
 
 exports.signup = function (req, res) {
+  //console.log('signup *******************************');
   let user = new userModel({
     login: req.body.userLogin,
     passwordHash: bcrypt.hashSync(req.body.userPassword, 8),
@@ -91,33 +88,39 @@ exports.signup = function (req, res) {
     user
       .save()
       .then((user) => {
+        //console.log('signup then *******************************');
+        //console.log(user);
+
         res.status(200).send({ message: "User was registered successfully!" });
       })
       .catch((err) => {
+       // console.log('signup catch *******************************'); 
+       // console.log(err)
         res.status(500).send({ message: err.message });
       });
   };
 
-  if (req.body.roles) {
-    roleModel
-      .find({ name: { $in: req.body.roles } })
-      .exec()
-      .then((roles) => {
-        user.roles = roles.map((role) => role._id);
-        userSave();
-      })
-      .catch((err) => {
-        res.status(500).send({ message: err.message });
-      });
-  } else {
-    roleModel
-      .findOne({ name: "user" })
-      .then((role) => {
-        user.roles.push(role._id);
-        userSave();
-      })
-      .catch((err) => {
-        res.status(500).send({ message: err.message });
-      });
-  }
+  userSave();
+
+  // if (req.body.roles) {
+  //   roleModel
+  //     .find({ name: { $in: req.body.roles } })
+  //     .exec()
+  //     .then((roles) => {
+  //       user.roles = roles.map((role) => role._id);
+  //       userSave();
+  //     .catch((err) => {
+  //       res.status(500).send({ message: err.message });
+  //     });
+  // } else {
+  //   roleModel
+  //     .findOne({ name: "user" })
+  //     .then((role) => {
+  //       user.roles.push(role._id);
+  //       userSave();
+  //     })
+  //     .catch((err) => {
+  //       res.status(500).send({ message: err.message });
+  //     });
+  // }
 };

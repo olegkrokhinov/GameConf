@@ -23,7 +23,9 @@ exports.updateUser = function(req, res) {
 
 exports.addUser = function(req, res) {
   (new userModel({name: req.body.name, age: req.body.age})).save()
-  .then((user) => {res.send(user)})  
+    .then((user) => {
+      res.send(user)
+    })
   .catch((error) => res.send(error.message))     
     
 };

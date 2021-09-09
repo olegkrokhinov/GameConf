@@ -19,7 +19,7 @@ export function addItemToDb(itemName, itemDescription, itemLocalImageFile) {
       Authorization: authUser.userAccessToken,
     },
   };
-  console.log(authUser.userAccessToken)
+  
   return fetchItem(options);
 }
 
@@ -79,7 +79,7 @@ export function getItemListFromDb() {
 
 function fetchItem(options, itemId = "") {
   return new Promise((resolve, reject) => {
-    
+    console.log(HOST + URL_ITEMS + '/' + itemId)
     fetch(HOST + URL_ITEMS + '/' + itemId, options)
       .then((res) => checkHtppError(res))
       .then((res) => {
@@ -94,7 +94,7 @@ function checkHtppError(res) {
   if (res.ok) {
     return res;
   } else {
-    let message = `Error ${res.status}: ${res.statusText}`;
+    let message = `checkHtppError Error ${res.status}: ${res.statusText}`;
     throw new Error(message);
   }
 }

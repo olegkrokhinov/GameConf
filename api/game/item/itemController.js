@@ -37,12 +37,14 @@ exports.getItem = function(req, res) {
 };
 
 exports.addItem = function(req, res) {
- 
+  console.log('addItem *******************')
   new model({
     name: req.body.itemName,
     description: req.body.itemDescription,
     imageUploadPath: saveImage(req.files)}).save()
-  .then(item => {
+    .then(item => {
+      console.log('addItem then *******************')
+      console.log(item)
     res.status(200).send(item)})
   .catch(error => res.status(500).send(error.message))
 

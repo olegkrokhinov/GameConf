@@ -9,6 +9,6 @@ checkAccessToken = [passport.authenticate('jwt', {session: false})];
 router.post('/signup', controller.signup);
 router.post('/login', controller.login);
 router.post('/logout', controller.logout);
-router.post('/refresh', checkAccessToken, controller.refresh);
+router.post('/refresh', checkAccessToken, controller.refreshToken);
 
 module.exports = router;
