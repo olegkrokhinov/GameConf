@@ -88,11 +88,11 @@ userSchema.methods.rejectFriendRequest = function (friendId) {
           reject(new Error(ERROR_FRІEND_ALREADY_REJECTED));
           brake
         };
-      default: {
-        friend.status = FRIEND_STATUS_REJECTED;
-        this.save();
-        resolve(friend);
-      };
+        default: {
+          friend.status = FRIEND_STATUS_REJECTED;
+          this.save();
+          resolve(friend);
+        };
       };
     } else {
       reject(new Error(ERROR_FRIEND_NOT_FOUND));

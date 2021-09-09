@@ -15,8 +15,8 @@ module.exports = app => {
 
   passport.use(new JwtStrategy(options, function (jwt_payload, done) {
     userModel.findOne({
-        _id: jwt_payload.userId
-      }).exec()
+      _id: jwt_payload.userId
+    }).exec()
       .then(user => {
         if (user) {
           return done(null, user);

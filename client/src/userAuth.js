@@ -63,7 +63,7 @@ export function login(userLogin, userPassword) {
     userLogin: userLogin,
     userPassword: userPassword,
   };
-  
+
   return new Promise((resolve, reject) => {
     fetch(HOST + URL_AUTH + '/login', {
       method: "POST",
@@ -112,13 +112,13 @@ export function register(userLogin, userPassword) {
 export function logOut() {
   return new Promise((resolve, reject) => {
     fetch(HOST + URL_AUTH + "/logout", {
-        method: "POST",
-        body: "",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: authUser.userAccessToken,
-        },
-      })
+      method: "POST",
+      body: "",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authUser.userAccessToken,
+      },
+    })
       .then(() => {
         resetUser();
         resolve();
@@ -131,12 +131,12 @@ export function refreshAccessTokenFromServer(autoupdate = false) {
   if (!tokenHasExpired(authUser.userAccessToken)) {
     return new Promise((resolve, reject) => {
       fetch(HOST + URL_AUTH + "/refresh", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: authUser.userAccessToken,
-          },
-        })
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authUser.userAccessToken,
+        },
+      })
         .then((res) => res.json())
         .then((user) => {
           saveUserToLocalStorage(user);
@@ -163,7 +163,7 @@ function tokenHasExpired(jwtToken) {
       if (typeof expires === "number") {
         return Date.now() > expires * 1000;
       }
-    } catch {}
+    } catch { }
   }
   return true;
 }
@@ -180,7 +180,7 @@ function getTokenExpiresAfter(jwtToken) {
           return expires * 1000 - Date.now();
         }
       }
-    } catch {}
+    } catch { }
   }
   return null;
 }

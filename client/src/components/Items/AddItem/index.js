@@ -41,7 +41,7 @@ export default function AddItem({
         setItemAction('edit');
         setSelectedItemId(item._id);
         setItemListNeedUpdate(true);
-        
+
       })
       .catch(error => {
         setSaveItemResultMessage('Save item catch error: ' + error.message);

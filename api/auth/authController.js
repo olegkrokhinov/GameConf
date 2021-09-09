@@ -2,7 +2,7 @@ const userModel = require("../user/userModel");
 const roleModel = require("../user/roleModel");
 const jwt = require("jsonwebtoken");
 bcrypt = require("bcrypt");
-const secret = process.env.SECRET ? process.env.SECRET: 'secret';
+const secret = process.env.SECRET ? process.env.SECRET : 'secret';
 
 exports.refreshToken = function (req, res) {
   if (!req.user) {
@@ -57,7 +57,7 @@ exports.login = function (req, res) {
       let jwtAccessToken = jwt.sign({ userId: user._id }, secret, {
         expiresIn: "1h",
       });
-      
+
       res.status(200).send({
         userId: user._id,
         userName: user.name,
@@ -94,8 +94,8 @@ exports.signup = function (req, res) {
         res.status(200).send({ message: "User was registered successfully!" });
       })
       .catch((err) => {
-       // console.log('signup catch *******************************'); 
-       // console.log(err)
+        // console.log('signup catch *******************************'); 
+        // console.log(err)
         res.status(500).send({ message: err.message });
       });
   };

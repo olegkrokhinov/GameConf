@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const fileUpload = require('express-fileupload');
- 
+
 app.use(fileUpload());
 app.use('/images/items', express.static(`${__dirname}/images/items`));
 app.use(express.json());
@@ -21,12 +21,12 @@ port = process.env.PORT ?
   process.env.PORT : 8080;
 
 mongoose.connect(db_uri, { useNewUrlParser: true, useUnifiedTopology: true })
-.then(()=> {
-  app.listen(port, function () {
-    console.log(`Waiting for connections at port ${process.env.PORT}...`);
-  });
-})
-.catch(error=> console.log(`Error: `+ error));
+  .then(() => {
+    app.listen(port, function () {
+      console.log(`Waiting for connections at port ${process.env.PORT}...`);
+    });
+  })
+  .catch(error => console.log(`Error: ` + error));
 
 process.on("SIGINT", () => {
   mongoose.disconnect();

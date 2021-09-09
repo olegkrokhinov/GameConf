@@ -19,7 +19,7 @@ export function addItemToDb(itemName, itemDescription, itemLocalImageFile) {
       Authorization: authUser.userAccessToken,
     },
   };
-  
+
   return fetchItem(options);
 }
 

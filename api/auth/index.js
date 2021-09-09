@@ -1,10 +1,10 @@
-const express =  require('express');
+const express = require('express');
 const router = express.Router();
 controller = require('./authController');
 
 const passport = require('passport');
 
-checkAccessToken = [passport.authenticate('jwt', {session: false})];
+checkAccessToken = [passport.authenticate('jwt', { session: false })];
 
 router.post('/signup', controller.signup);
 router.post('/login', controller.login);

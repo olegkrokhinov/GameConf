@@ -8,6 +8,6 @@ module.exports = {
         //FRIEND_NOT_FOUND :'Friend (friend request) not found.',
         //USER_NOT_FOUND : 'User not found.',
         //FAILED_TO_SAVE_USER : 'Failed to save user to database',
-    } 
-    
+    }
+
 }
