@@ -4,6 +4,8 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const fileUpload = require('express-fileupload');
+const { initDb } = require('./initDb');
+
 
 app.use(fileUpload());
 app.use('/images/items', express.static(`${__dirname}/images/items`));
@@ -14,16 +16,17 @@ require('./api/auth/passport')(app)
 require('./appRoutes')(app);
 
 
-db_uri = process.env.DB_URI ?
+const db_uri = process.env.DB_URI ?
   process.env.DB_URI : 'mongodb://gameconf-db:27017/gameconf';
 
-port = process.env.PORT ?
+const port = process.env.PORT ?
   process.env.PORT : 8080;
 
 mongoose.connect(db_uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
+    initDb();
     app.listen(port, function () {
-      console.log(`Waiting for connections at port ${process.env.PORT}...`);
+      console.log(`Waiting for connections at port ${port}...`);
     });
   })
   .catch(error => console.log(`Error: ` + error));

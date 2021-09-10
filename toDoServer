@@ -1,0 +1,1 @@
+accessToken table (as userModel field []) for token validation. logout or expired -> block or del token
