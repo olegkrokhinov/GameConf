@@ -10,10 +10,9 @@ export default function Home(...props) {
   const [userIsAuthenticated, setUserIsAuthenticated] = useState(
     Boolean(authUser?.userAccessToken)
   );
-  console.log(userIsAuthenticated);
-  addAuthStateListener(setUserIsAuthenticated);
 
   useEffect(() => {
+    addAuthStateListener(setUserIsAuthenticated);
     return () => {
       removeAuthStateListener(setUserIsAuthenticated);
     };

@@ -76,9 +76,9 @@ export function login(userLogin, userPassword) {
         "Content-Type": "application/json",
       },
     })
-      .then((res) => res.json())
-      .then((user) => {
-        console.log(user)
+      .then(res => checkHtppError(res))
+      .then(res => res.json())
+      .then(user => {
         saveUserToLocalStorage(user);
         Object.assign(authUser, user);
         setAuthState(true);
@@ -106,7 +106,6 @@ export function register(userLogin, userPassword) {
     })
       .then((res) => res.json())
       .then((user) => {
-        console.log(user)
         resolve(user);
       })
       .catch(reject);
@@ -116,7 +115,6 @@ export function register(userLogin, userPassword) {
 export function logOut() {
   return new Promise((resolve, reject) => {
     fetch(HOST + URL_AUTH + "/logout", {
-      assign
       method: "POST",
       body: "",
       headers: {
@@ -197,4 +195,14 @@ function startTokenRefreshTimer() {
     getTokenExpiresAfter(authUser.userAccessToken) -
     tokenRefreshTimerDelta
   );
+}
+
+
+function checkHtppError(res) {
+  if (res.ok) {
+    return res;
+  } else {
+    let message = `checkHtppError Error ${res.status}: ${res.statusText}`;
+    throw new Error(message);
+  }
 }

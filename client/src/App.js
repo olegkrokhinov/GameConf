@@ -15,7 +15,7 @@ import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
 import ListRoundedIcon from "@material-ui/icons/ListRounded";
 import { makeStyles } from "@material-ui/core/styles";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, Route, Switch } from "react-router-dom";
 import Home from "./components/Home.js";
 import Items from "./components/Items";
@@ -26,6 +26,7 @@ import {
   logOut,
   authUser,
   addAuthStateListener,
+  removeAuthStateListener
 } from "./userAuth.js";
 
 const useStyles = makeStyles((theme) => ({
@@ -48,7 +49,13 @@ export default function App() {
     Boolean(authUser?.userAccessToken)
   );
 
-  addAuthStateListener(setUserIsAuthenticated);
+  useEffect(() => {
+    addAuthStateListener(setUserIsAuthenticated);
+    return () =>
+      removeAuthStateListener(setUserIsAuthenticated);
+  }, []);
+
+
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
