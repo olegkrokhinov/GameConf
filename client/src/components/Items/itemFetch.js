@@ -4,6 +4,7 @@ import {
 import {
   HOST
 } from '../../config'
+import { checkHtppError } from "../../HttpError";
 const URL_ITEMS = "/items";
 
 export function addItemToDb(itemName, itemDescription, itemLocalImageFile) {
@@ -30,7 +31,6 @@ export function saveItemToDb(
   itemLocalImageFile
 ) {
   const formData = new FormData();
-  console.log(itemId);
   formData.append("itemId", itemId);
   formData.append("itemName", itemName);
   formData.append("itemDescription", itemDescription);
@@ -79,22 +79,12 @@ export function getItemListFromDb() {
 
 function fetchItem(options, itemId = "") {
   return new Promise((resolve, reject) => {
-    console.log(HOST + URL_ITEMS + '/' + itemId)
     fetch(HOST + URL_ITEMS + '/' + itemId, options)
-      .then((res) => checkHtppError(res))
-      .then((res) => {
+      .then(res => checkHtppError(res))
+      .then(res => {
         return res.json()
       })
-      .then((json) => resolve(json))
+      .then(json => resolve(json))
       .catch(reject);
   });
-}
-
-function checkHtppError(res) {
-  if (res.ok) {
-    return res;
-  } else {
-    let message = `checkHtppError Error ${res.status}: ${res.statusText}`;
-    throw new Error(message);
-  }
 }

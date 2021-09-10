@@ -4,7 +4,7 @@ import { authUser } from "../userAuth";
 import {
   addAuthStateListener,
   removeAuthStateListener,
-} from "../userAuth";
+} from "../userAuthListeners";
 
 export default function Home(...props) {
   const [userIsAuthenticated, setUserIsAuthenticated] = useState(

@@ -1,10 +1,14 @@
+import { tokenHasExpired, getTokenExpiresAfter } from './JWTUtils'
+import { setAuthState } from './userAuthListeners'
+import { checkHtppError } from './HttpError';
+
 import {
   HOST
 } from './config'
 
 const URL_AUTH = "/auth";
 
-export const authUser= {};
+export const authUser = {};
 
 const emptyUser = {
   userid: '',
@@ -19,25 +23,8 @@ Object.assign(authUser, emptyUser)
 let tokenRefreshTimerDelta = 60000;
 let tokenRefreshTimerId = "";
 
-let authListeners = [];
-
 loadUserFromLocalStorage();
 refreshAccessTokenFromServer(true);
-
-export function addAuthStateListener(listener) {
-  authListeners.push(listener);
-}
-
-export function removeAuthStateListener(listener) {
-  let index = authListeners.indexOf(listener);
-  if (index > -1) {
-    authListeners.splice(index, 1);
-  }
-}
-
-function setAuthState(authenticated) {
-  authListeners.forEach((listener) => listener(authenticated));
-}
 
 export function loadUserFromLocalStorage() {
   let user = JSON.parse(localStorage.getItem("user"));
@@ -104,8 +91,8 @@ export function register(userLogin, userPassword) {
         "Content-Type": "application/json",
       },
     })
-      .then((res) => res.json())
-      .then((user) => {
+      .then(res => res.json())
+      .then(user => {
         resolve(user);
       })
       .catch(reject);
@@ -140,8 +127,8 @@ export function refreshAccessTokenFromServer(autoupdate = false) {
           Authorization: authUser.userAccessToken,
         },
       })
-        .then((res) => res.json())
-        .then((user) => {
+        .then(res => res.json())
+        .then(user => {
           saveUserToLocalStorage(user);
           Object.assign(authUser, user);
           setAuthState(true);
@@ -156,38 +143,6 @@ export function refreshAccessTokenFromServer(autoupdate = false) {
   }
 }
 
-function tokenHasExpired(jwtToken) {
-  if (jwtToken) {
-    try {
-      const [, payload] = jwtToken.split(".");
-      const {
-        exp: expires
-      } = JSON.parse(window.atob(payload));
-      if (typeof expires === "number") {
-        return Date.now() > expires * 1000;
-      }
-    } catch { }
-  }
-  return true;
-}
-
-function getTokenExpiresAfter(jwtToken) {
-  if (jwtToken) {
-    try {
-      const [, payload] = jwtToken.split(".");
-      const {
-        exp: expires
-      } = JSON.parse(window.atob(payload));
-      if (typeof expires === "number") {
-        if (Date.now() < expires * 1000) {
-          return expires * 1000 - Date.now();
-        }
-      }
-    } catch { }
-  }
-  return null;
-}
-
 function startTokenRefreshTimer() {
   clearTimeout(tokenRefreshTimerId);
   tokenRefreshTimerId = setTimeout(
@@ -195,14 +150,4 @@ function startTokenRefreshTimer() {
     getTokenExpiresAfter(authUser.userAccessToken) -
     tokenRefreshTimerDelta
   );
-}
-
-
-function checkHtppError(res) {
-  if (res.ok) {
-    return res;
-  } else {
-    let message = `checkHtppError Error ${res.status}: ${res.statusText}`;
-    throw new Error(message);
-  }
 }

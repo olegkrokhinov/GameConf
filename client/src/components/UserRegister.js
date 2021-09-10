@@ -18,12 +18,12 @@ export default function UserRegister(props) {
   function handleSubmit(event) {
     event.preventDefault();
     register(login, password)
-      .then((json) => {
+      .then(json => {
         setRegisterResultMessage("User registered successfuly!");
         setRegistered(true);
       })
-      .catch((error) => {
-        setRegisterResultMessage("UserRegister catch error: " + error.message);
+      .catch(error => {
+        setRegisterResultMessage("User register error: " + error.message);
         setRegistered(false);
       });
   }

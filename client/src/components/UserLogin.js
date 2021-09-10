@@ -17,10 +17,10 @@ export default function UserLogin(props) {
   function handleSubmit(event) {
     event.preventDefault();
     authLogin(login, password)
-      .then((user) => {
+      .then(user => {
         props.history.push("/");
       })
-      .catch((error) => {
+      .catch(error => {
         setLoginResultMessage("UserLogin catch error: " + error.message);
       });
   }

@@ -25,9 +25,9 @@ import UserRegister from "./components/UserRegister.js";
 import {
   logOut,
   authUser,
-  addAuthStateListener,
-  removeAuthStateListener
 } from "./userAuth.js";
+
+import {addAuthStateListener, removeAuthStateListener} from './userAuthListeners'
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
