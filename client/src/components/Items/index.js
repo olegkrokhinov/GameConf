@@ -60,9 +60,9 @@ export default function Items({ ...props }) {
     } else {
       getItemFromDb(selectedItemId)
         .then((item) => setSelectedItem(item))
-        .catch((err) => {});
+        .catch((err) => { });
     }
-  }, [selectedItemId]);
+  }, [selectedItemId, itemAction]);
 
   function handleDeleteItem() {
     deleteItemFromDb(selectedItem._id)
@@ -138,7 +138,7 @@ export default function Items({ ...props }) {
             direction="column"
             justifyContent="flex-start"
             alignItems="stretch"
-          >  
+          >
             <ItemActionHeader
               item={selectedItem}
               itemAction={itemAction}

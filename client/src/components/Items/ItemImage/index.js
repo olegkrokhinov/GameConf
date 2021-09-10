@@ -12,8 +12,8 @@ const useStyles = makeStyles(() => ({
     display: "none",
   },
   img: {
-    width: 450,
-    height: 450,
+    width: 490,
+    height: 490,
     borderRadius: 5,
   },
   btn: {

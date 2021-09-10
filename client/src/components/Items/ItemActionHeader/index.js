@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => (
 export default function ItemActionHeader({ item, itemAction, handleDeleteItem }) {
 
   const classes = useStyles();
-
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl)
 
@@ -32,7 +31,6 @@ export default function ItemActionHeader({ item, itemAction, handleDeleteItem })
   function handleMenuClose(event) {
     setAnchorEl(null);
   }
-
 
   function handleDelete(event) {
     setAnchorEl(null);
