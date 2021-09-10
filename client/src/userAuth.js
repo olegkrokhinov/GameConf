@@ -4,13 +4,17 @@ import {
 
 const URL_AUTH = "/auth";
 
-export const authUser = {
+export const authUser= {};
+
+const emptyUser = {
   userid: '',
   userName: '',
   userLogin: '',
   userRoles: [],
   userAccessToken: ''
 };
+
+Object.assign(authUser, emptyUser)
 
 let tokenRefreshTimerDelta = 60000;
 let tokenRefreshTimerId = "";
@@ -52,10 +56,10 @@ function saveUserToLocalStorage(user) {
 }
 
 function resetUser() {
-  setAuthState(false);
-  Object.assign(authUser, {});
+  Object.assign(authUser, emptyUser);
   localStorage.removeItem("user");
   clearTimeout(tokenRefreshTimerId);
+  setAuthState(false);
 }
 
 export function login(userLogin, userPassword) {
@@ -112,6 +116,7 @@ export function register(userLogin, userPassword) {
 export function logOut() {
   return new Promise((resolve, reject) => {
     fetch(HOST + URL_AUTH + "/logout", {
+      assign
       method: "POST",
       body: "",
       headers: {
