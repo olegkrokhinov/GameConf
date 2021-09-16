@@ -8,14 +8,13 @@ function saveImage(reqfiles) {
   let imageFile = '';
   if (reqfiles) {
     imageFile = reqfiles.itemLocalImageFile;
-    console.log(imageFile);
-    realUploadPath = path.join(appDir, '/images/items/', imageFile.name);
-    console.log('********************************************** ' + realUploadPath)
-    uploadPath = path.posix.join(path.posix.sep, '/images/items/', imageFile.name);
-    console.log('********************************************** ' + uploadPath)
+    realUploadPath = path.join(appDir, '/images/items', imageFile.name);
+    console.log('****************** realUploadPath **************************** ' + realUploadPath)
+    uploadPath = path.posix.join(path.posix.sep, '/images/items', imageFile.name);
+    console.log('********************* uploadPath ************************* ' + uploadPath)
     imageFile.mv(realUploadPath, err => {
       if (err) {
-        //return res.status(500).send(err);
+        console.log(err.message)
       }
     });
   };
@@ -37,15 +36,13 @@ exports.getItem = function (req, res) {
 };
 
 exports.addItem = function (req, res) {
-  console.log('addItem *******************')
   new model({
     name: req.body.itemName,
     description: req.body.itemDescription,
     imageUploadPath: saveImage(req.files)
   }).save()
     .then(item => {
-      console.log('addItem then *******************')
-      console.log(item)
+     
       res.status(200).send(item)
     })
     .catch(error => res.status(500).send(error.message))

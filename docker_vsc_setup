@@ -1,0 +1,14 @@
+
+curl https://get.docker.com | sh
+sudo usermod -aG docker $USER
+sudo reboot
+sudo systemctl start docker
+sudo systemctl enable docker
+
+
+
+cd ~/tmp
+git clone https://aur.archlinux.org/visual-studio-code-bin.git
+cd visual-studio-code-bin/
+makepkg -si
+
