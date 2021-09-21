@@ -22,30 +22,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Item({
+export default function ListItem({
   item,
-  selectedItemId,
-  setSelectedItemId,
-  setItemAction,
+  selectedItem,
+  listItemClick, 
 }) {
   const classes = useStyles();
   const [mouseOver, setMouseOver] = useState(false);
   const [selected, setSelected] = useState(false);
 
   useEffect(() => {
-    setSelected(selectedItemId === item._id);
-  }, [selectedItemId, item._id]);
+    setSelected(selectedItem === item);
+  }, [selectedItem, item]);
 
-  function handleClick(event) {
-    setSelectedItemId(item._id);
-    setItemAction("edit");
-  }
 
   return (
     <Grid
       item
       container
-      onClick={handleClick}
+      onClick={() => listItemClick(item)}
       onMouseEnter={() => setMouseOver(true)}
       onMouseLeave={() => setMouseOver(false)}
       className={selected || mouseOver ? classes.selectedItem : ""}

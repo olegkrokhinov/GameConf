@@ -3,14 +3,14 @@ import ListItem from "./ListItem";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
-import EditItem from "./EditItem";
-import AddItem from "./AddItem";
 import {
   getItemListFromDb,
-  getItemFromDb,
   deleteItemFromDb,
+  saveItemToDb,
+  addItemToDb,
 } from "./itemFetch";
 import ItemActionHeader from "./ItemActionHeader";
+import ItemAction from "./ItemAction";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,9 +38,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Items({ ...props }) {
   const [list, setList] = useState([]);
-  const [itemAction, setItemAction] = useState('');
+  const [currentAction, setCurrentAction] = useState("");
   const [selectedItem, setSelectedItem] = useState({});
-  const [saveItemResultMessage, setSaveItemResultMessage] = useState('');
+  const [saveItemResultMessage, setSaveItemResultMessage] = useState("");
 
   const classes = useStyles();
 
@@ -48,18 +48,17 @@ export default function Items({ ...props }) {
     refreshItemsList();
   }, [selectedItem]);
 
-
   function handleDeleteItem() {
     deleteItemFromDb(selectedItem)
       .then(() => {
-        setSelectedItem({null);
-        setItemAction("");
+        setSelectedItem(null);
+        setCurrentAction("");
       })
       .catch();
   }
 
   const addItem = (event) => {
-    setItemAction("add");
+    setCurrentAction("add");
   };
   const refreshItemsList = () => {
     getItemListFromDb()
@@ -68,38 +67,39 @@ export default function Items({ ...props }) {
       })
       .catch((err) => err.message);
   };
-  
+
   const listItemClick = (item) => {
-    setSelectedItem(item)
-    setItemAction('edit');
+    setSelectedItem(item);
+    setCurrentAction("edit");
   };
-  
-  const submitItemAction = (item) => {
-    (itemAction === 'add') && saveAddedItem(item);
-    (itemAction === 'edit') && saveEditedItem(item);
-  }
 
   const saveEditedItem = (item) => {
     saveItemToDb(item)
       .then((item) => {
+        setSelectedItem(item);
         setSaveItemResultMessage("Item saved successfully!");
       })
       .catch((error) => {
         setSaveItemResultMessage("Save item catch error: " + error.message);
       });
-  }
+  };
 
-
-  const saveAddedItem = (item) =>{ 
+  const saveAddedItem = (item) => {
     addItemToDb(item)
       .then((item) => {
-        setItemAction('edit');
+        setSelectedItem(item);
+        setCurrentAction("edit");
         setSaveItemResultMessage("Item saved successfully!");
       })
-      .catch(error => {
-        setSaveItemResultMessage('Save item catch error: ' + error.message);
-      })
-  }
+      .catch((error) => {
+        setSaveItemResultMessage("Save item catch error: " + error.message);
+      });
+  };
+
+  const submitItemAction = (item) => {
+    currentAction === "add" && saveAddedItem(item);
+    currentAction === "edit" && saveEditedItem(item);
+  };
 
   return (
     <>
@@ -125,7 +125,7 @@ export default function Items({ ...props }) {
                   item={item}
                   selectedItem={selectedItem}
                   listItemClick={listItemClick}
-                  setItemAction={setItemAction}
+                  setCurrentAction={setCurrentAction}
                 />
               ))}
             </Grid>
@@ -152,35 +152,29 @@ export default function Items({ ...props }) {
             </Grid>
           </Grid>
 
-          <Grid item container xs className={classes.action}
+          <Grid
+            item
+            container
+            xs
+            className={classes.action}
             direction="column"
             justifyContent="flex-start"
             alignItems="stretch"
           >
             <ItemActionHeader
-              item={(itemAction === 'add') ? null : { selectedItem }}
-              itemAction={itemAction}
+              item={currentAction === "add" ? null : { selectedItem }}
+              current={currentAction}
+              cuttentAction={currentAction}
               handleDeleteItem={handleDeleteItem}
             />
             <ItemAction
-              item={(itemAction==='add')? null :{selectedItem}}
+              item={currentAction === "add" ? null : { selectedItem }}
               setItem={setSelectedItem}
-              submitItemAction = {submitItemAction}
+              submitItemAction={submitItemAction}
             />
-
           </Grid>
         </Grid>
       </div>
     </>
   );
 }
-
-
-// useEffect(() => {
-//   if (itemAction === "add") {
-//   } else {
-//     getItemFromDb(selectedItemId)
-//       .then((item) => setSelectedItem(item))
-//       .catch((err) => { });
-//   }
-// }, [selectedItemId, itemAction]);

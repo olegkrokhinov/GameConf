@@ -7,11 +7,11 @@ import {
 import { checkHtppError } from "../../HttpError";
 const URL_ITEMS = "/items";
 
-export function addItemToDb(itemName, itemDescription, itemLocalImageFile) {
+export function addItemToDb(item) {
   const formData = new FormData();
-  formData.append("itemName", itemName);
-  formData.append("itemDescription", itemDescription);
-  formData.append("itemLocalImageFile", itemLocalImageFile);
+  formData.append("itemName", item.name);
+  formData.append("itemDescription", item.description);
+  formData.append("itemLocalImageFile", item.localImageFile);
 
   const options = {
     method: "POST",
@@ -25,16 +25,13 @@ export function addItemToDb(itemName, itemDescription, itemLocalImageFile) {
 }
 
 export function saveItemToDb(
-  itemId,
-  itemName,
-  itemDescription,
-  itemLocalImageFile
+  item
 ) {
   const formData = new FormData();
-  formData.append("itemId", itemId);
-  formData.append("itemName", itemName);
-  formData.append("itemDescription", itemDescription);
-  formData.append("itemLocalImageFile", itemLocalImageFile);
+  formData.append("itemId", item._id);
+  formData.append("itemName", item.name);
+  formData.append("itemDescription", item.description);
+  formData.append("itemLocalImageFile", item.localImageFile);
   formData.append("emptyImage", "false");
 
   const options = {
@@ -47,24 +44,24 @@ export function saveItemToDb(
   return fetchItem(options);
 }
 
-export function getItemFromDb(itemId) {
+export function getItemFromDb(item) {
   const options = {
     method: "GET",
     headers: {
       Authorization: authUser.userAccessToken,
     },
   };
-  return fetchItem(options, itemId);
+  return fetchItem(options, item._id);
 }
 
-export function deleteItemFromDb(itemId) {
+export function deleteItemFromDb(item) {
   const options = {
     method: "DELETE",
     headers: {
       Authorization: authUser.userAccessToken
     },
   };
-  return fetchItem(options, itemId);
+  return fetchItem(options, item._id);
 }
 
 export function getItemListFromDb() {
