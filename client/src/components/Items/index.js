@@ -45,10 +45,10 @@ export default function Items({ ...props }) {
   const classes = useStyles();
 
   useEffect(() => {
-    refreshItemsList();
+    
   }, [selectedItem]);
 
-  function handleDeleteItem() {
+  function deleteItem() {
     deleteItemFromDb(selectedItem)
       .then(() => {
         setSelectedItem(null);
@@ -77,6 +77,7 @@ export default function Items({ ...props }) {
     saveItemToDb(item)
       .then((item) => {
         setSelectedItem(item);
+        refreshItemsList();
         setSaveItemResultMessage("Item saved successfully!");
       })
       .catch((error) => {
@@ -88,6 +89,7 @@ export default function Items({ ...props }) {
     addItemToDb(item)
       .then((item) => {
         setSelectedItem(item);
+        refreshItemsList();
         setCurrentAction("edit");
         setSaveItemResultMessage("Item saved successfully!");
       })
@@ -162,13 +164,13 @@ export default function Items({ ...props }) {
             alignItems="stretch"
           >
             <ItemActionHeader
-              item={currentAction === "add" ? null : { selectedItem }}
+              selectedItem={currentAction === "add" ? null :  selectedItem }
               current={currentAction}
               cuttentAction={currentAction}
-              handleDeleteItem={handleDeleteItem}
+              deleteItem={deleteItem}
             />
             <ItemAction
-              item={currentAction === "add" ? null : { selectedItem }}
+              selectedItem={currentAction === "add" ? null :  selectedItem }
               setItem={setSelectedItem}
               submitItemAction={submitItemAction}
             />

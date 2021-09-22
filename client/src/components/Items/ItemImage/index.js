@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function ItemImage({
-  item,
+  setLocalImageFile, imageUploadPath,
   onlyImage,
 }) {
   const classes = useStyles();
@@ -34,16 +34,14 @@ export default function ItemImage({
   function handleItemImageChange(event) {
     if (event.target.files && event.target.files[0]) {
       let file = event.target.files[0];
-      item.localImageFile = file;
+      setLocalImageFile(file);
       setItemImagePreviewUrl(URL.createObjectURL(file));
     }
   }
 
   useEffect(() => {
-    item  && item.imageUploadPath
-      &&
-    setItemImagePreviewUrl(HOST + item.imageUploadPath);
-  }, []);
+    imageUploadPath && setItemImagePreviewUrl(HOST + imageUploadPath);
+  }, [imageUploadPath]);
 
   return (
     <div className={classes.root}>

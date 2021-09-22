@@ -24,9 +24,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ItemActionHeader({
-  item,
+  selectedItem,
   currentAction,
-  handleDeleteItem,
+  deleteItem,
 }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -42,7 +42,7 @@ export default function ItemActionHeader({
 
   function handleDelete(event) {
     setAnchorEl(null);
-    handleDeleteItem();
+    deleteItem();
   }
 
   return (
@@ -58,11 +58,11 @@ export default function ItemActionHeader({
         >
           <Grid item className={classes.content}>
             <Typography variant="h6">
-              {item ? item.name : "New item"}
+              {selectedItem ? selectedItem.name : "New item"}
             </Typography>
           </Grid>
           <Grid item className={classes.content}>
-            <Typography>{item?.description}</Typography>
+            <Typography>{selectedItem?.description}</Typography>
           </Grid>
         </Grid>
 

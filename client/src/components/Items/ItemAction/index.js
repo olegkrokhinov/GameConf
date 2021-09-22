@@ -1,6 +1,5 @@
 import { Button, Grid, makeStyles, TextField } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { saveItemToDb } from "../itemFetch";
 import ItemImage from "../ItemImage";
 import SaveIcon from "@material-ui/icons/Save";
 
@@ -13,21 +12,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ItemAction({
-  item,
-  setItem,
-  submitItemAction,
-}) {
+export default function ItemAction({ selectedItem, submitItemAction }) {
   const classes = useStyles();
 
   const [itemName, setItemName] = useState('');
   const [itemDescription, setItemDescription] = useState('');
-
-
+  const [localImageFile, setLocalImageFile] = useState('');
+  
   useEffect(() => {
-    setItemName(item?.name);
-    setItemDescription(item?.description);
-  }, [item]);
+    setItemName(selectedItem ? selectedItem.name : '');
+    setItemDescription(selectedItem?.description);
+    setLocalImageFile(selectedItem?.localImageFile);
+  }, [selectedItem]);
 
   function handleNameChange(event) {
     setItemName(event.target.value);
@@ -37,6 +33,15 @@ export default function ItemAction({
     setItemDescription(event.target.value);
   }
 
+  function saveItem() {
+    let item = {
+      _id: selectedItem?._id,
+      name: itemName,
+      description: itemDescription,
+      localImageFile: localImageFile,
+    };
+    submitItemAction(item);
+  }
 
   return (
     <>
@@ -79,21 +84,21 @@ export default function ItemAction({
 
         <Grid item>
           <ItemImage
-            item = {item}
+            setLocalImageFile={setLocalImageFile}
+            imageUploadPath={selectedItem?.imageUploadPath}
           />
         </Grid>
 
         <Grid item>
           <Button
             startIcon={<SaveIcon />}
-            onClick={() => submitItemAction(item)}
+            onClick={saveItem}
             variant="outlined"
           >
             Save
           </Button>
         </Grid>
       </Grid>
-
     </>
   );
 }
