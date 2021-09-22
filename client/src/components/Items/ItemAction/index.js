@@ -15,25 +15,25 @@ const useStyles = makeStyles((theme) => ({
 export default function ItemAction({ selectedItem, submitItemAction }) {
   const classes = useStyles();
 
-  const [itemName, setItemName] = useState('');
-  const [itemDescription, setItemDescription] = useState('');
-  const [localImageFile, setLocalImageFile] = useState('');
-  
+  const [itemName, setItemName] = useState("");
+  const [itemDescription, setItemDescription] = useState("");
+  const [localImageFile, setLocalImageFile] = useState("");
+
   useEffect(() => {
-    setItemName(selectedItem ? selectedItem.name : '');
-    setItemDescription(selectedItem?.description);
-    setLocalImageFile(selectedItem?.localImageFile);
+    setItemName(selectedItem ? selectedItem.name : "");
+    setItemDescription(selectedItem ? selectedItem.description : "");
+    setLocalImageFile(selectedItem ? selectedItem.localImageFile : "");
   }, [selectedItem]);
 
-  function handleNameChange(event) {
+  const handleNameChange = (event) => {
     setItemName(event.target.value);
-  }
+  };
 
-  function handleDescriptionChange(event) {
+  const handleDescriptionChange = (event) => {
     setItemDescription(event.target.value);
-  }
+  };
 
-  function saveItem() {
+  const saveItem = () => {
     let item = {
       _id: selectedItem?._id,
       name: itemName,
@@ -41,7 +41,7 @@ export default function ItemAction({ selectedItem, submitItemAction }) {
       localImageFile: localImageFile,
     };
     submitItemAction(item);
-  }
+  };
 
   return (
     <>

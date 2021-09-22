@@ -32,18 +32,18 @@ export default function ItemActionHeader({
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
 
-  function handleMenuOpen(event) {
+  const handleMenuOpen = (event) => {
     setAnchorEl(event.target);
-  }
+  };
 
-  function handleMenuClose(event) {
+  const handleMenuClose = (event) => {
     setAnchorEl(null);
-  }
+  };
 
-  function handleDelete(event) {
+  const handleDelete = (event) => {
     setAnchorEl(null);
     deleteItem();
-  }
+  };
 
   return (
     <>

@@ -36,26 +36,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Items({ ...props }) {
+export default function Items({ setAppBarTitle, ...props }) {
   const [list, setList] = useState([]);
   const [currentAction, setCurrentAction] = useState("");
   const [selectedItem, setSelectedItem] = useState({});
   const [saveItemResultMessage, setSaveItemResultMessage] = useState("");
 
+  setAppBarTitle("Items");
+
   const classes = useStyles();
 
-  useEffect(() => {
-    
-  }, [selectedItem]);
+  useEffect(() => {}, [selectedItem]);
 
-  function deleteItem() {
+  const deleteItem = () => {
     deleteItemFromDb(selectedItem)
       .then(() => {
         setSelectedItem(null);
         setCurrentAction("");
       })
       .catch();
-  }
+  };
 
   const addItem = (event) => {
     setCurrentAction("add");
@@ -164,13 +164,13 @@ export default function Items({ ...props }) {
             alignItems="stretch"
           >
             <ItemActionHeader
-              selectedItem={currentAction === "add" ? null :  selectedItem }
+              selectedItem={currentAction === "add" ? null : selectedItem}
               current={currentAction}
               cuttentAction={currentAction}
               deleteItem={deleteItem}
             />
             <ItemAction
-              selectedItem={currentAction === "add" ? null :  selectedItem }
+              selectedItem={currentAction === "add" ? null : selectedItem}
               setItem={setSelectedItem}
               submitItemAction={submitItemAction}
             />

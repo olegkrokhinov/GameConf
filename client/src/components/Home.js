@@ -6,10 +6,12 @@ import {
   removeAuthStateListener,
 } from "../userAuthListeners";
 
-export default function Home(...props) {
+export default function Home({ setAppBarTitle, ...props }) {
   const [userIsAuthenticated, setUserIsAuthenticated] = useState(
     Boolean(authUser?.userAccessToken)
   );
+
+  setAppBarTitle('Home')
 
   useEffect(() => {
     addAuthStateListener(setUserIsAuthenticated);

@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { login as authLogin } from "../userAuth.js";
 
-export default function UserLogin(props) {
+export default function UserLogin({setAppBarTitle , ...props }) {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [loginResultMessage, setLoginResultMessage] = useState("");
 
+  setAppBarTitle('Login');
+  
   function handleLoginChange(event) {
     setLogin(event.target.value);
   }
