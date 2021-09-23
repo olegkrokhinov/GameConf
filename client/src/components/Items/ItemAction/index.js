@@ -25,31 +25,31 @@ export default function ItemAction({ selectedItem, submitItemAction }) {
   const fields = [
     {
       label: "Item description",
-      value: "itemDescription",
+      value: itemDescription,
       placeholder: "Enter item description here",
       onChange: "handleDescriptionChange",
     },
     {
       label: "Item name",
-      value: "itemName",
+      value: itemName,
       placeholder: "Enter item name here",
       onChange: "handleNameChange",
     },
     {
       label: "Item type",
-      value: "itemType",
+      value: itemType,
       placeholder: "Enter item type here",
       onChange: "handleTypeChange",
     },
     {
       label: "Item color",
-      value: "itemColor",
+      value: itemColor,
       placeholder: "Enter item color here",
       onChange: "handleColorChange",
     },
     {
       label: "Item shape",
-      value: "itemShape",
+      value: itemShape,
       placeholder: "Enter item shape here",
       onChange: "handleShapeChange",
     },
@@ -71,15 +71,16 @@ export default function ItemAction({ selectedItem, submitItemAction }) {
   const handleDescriptionChange = (event) => {
     setItemDescription(event.target.value);
   };
-  
+
   const handleTypeChange = (event) => {
     setItemType(event.target.value);
   };
-  
+
   const handleColorChange = (event) => {
+    alert('color')
     setItemColor(event.target.value);
   };
-  
+
   const handleShapeChange = (event) => {
     setItemShape(event.target.value);
   };
@@ -135,15 +136,17 @@ export default function ItemAction({ selectedItem, submitItemAction }) {
         </Grid>
 
         {fields.map((field, index) => (
-          <TextField
-            className={classes.textField}
-            label={field.label}
-            value={[field.value]}
-            placeholder={field.placeholder}
-            onChange={[field.onChange]}
-            variant="outlined"
-            size="small"
-          />
+          <Grid item>
+            <TextField
+              className={classes.textField}
+              label={field.label}
+              value={[field.value]}
+              placeholder={field.placeholder}
+              onChange={[field.onChange]}
+              variant="outlined"
+              size="small"
+            />
+          </Grid>
         ))}
 
         <Grid item>
