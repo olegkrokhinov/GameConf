@@ -32,7 +32,7 @@ export default function ListItem({
   const [selected, setSelected] = useState(false);
 
   useEffect(() => {
-    setSelected(selectedItem._id === item._id);
+    setSelected(selectedItem?._id === item?._id);
   }, [selectedItem, item]);
 
 

@@ -53,6 +53,7 @@ export default function Items({ setAppBarTitle, ...props }) {
       .then(() => {
         setSelectedItem(null);
         setCurrentAction("");
+        refreshItemsList();
       })
       .catch();
   };
@@ -163,17 +164,20 @@ export default function Items({ setAppBarTitle, ...props }) {
             justifyContent="flex-start"
             alignItems="stretch"
           >
-            <ItemActionHeader
-              selectedItem={currentAction === "add" ? null : selectedItem}
-              current={currentAction}
-              cuttentAction={currentAction}
-              deleteItem={deleteItem}
-            />
-            <ItemAction
-              selectedItem={currentAction === "add" ? null : selectedItem}
-              setItem={setSelectedItem}
-              submitItemAction={submitItemAction}
-            />
+            {!(currentAction === "") && (
+              <>
+                <ItemActionHeader
+                  selectedItem={currentAction === "add" ? null : selectedItem}
+                  currentAction={currentAction}
+                  deleteItem={deleteItem}
+                />
+                <ItemAction
+                  selectedItem={currentAction === "add" ? null : selectedItem}
+                  setItem={setSelectedItem}
+                  submitItemAction={submitItemAction}
+                />
+              </>
+            )}
           </Grid>
         </Grid>
       </div>

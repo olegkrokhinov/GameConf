@@ -8,10 +8,7 @@ import { Link } from "react-router-dom";
 
 import AuthWrap from "./AuthWrap";
 
-
-
 export default function LeftBar({ drawer, setDrawer }) {
-
   return (
     <SwipeableDrawer
       anchor="left"
@@ -31,6 +28,7 @@ export default function LeftBar({ drawer, setDrawer }) {
         </ListItemIcon>
         <ListItemText primary="Home" />
       </ListItem>
+
       <AuthWrap authenticated>
         <ListItem
           button

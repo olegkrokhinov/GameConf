@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TopBar({ appBarTitle, setDrawer }) {
   const classes = useStyles();
- 
+
   return (
     <AppBar position="fixed">
       <Toolbar className={classes.toolBar}>
@@ -44,13 +44,14 @@ export default function TopBar({ appBarTitle, setDrawer }) {
         </Typography>
 
         <AuthWrap>
-            <Button color="inherit" component={Link} to="/register">
-              Register
-            </Button>
-            <Button color="inherit" component={Link} to="/login">
-              Login
-            </Button>
+          <Button color="inherit" component={Link} to="/register">
+            Register
+          </Button>
+          <Button color="inherit" component={Link} to="/login">
+            Login
+          </Button>
         </AuthWrap>
+
         <AuthWrap authenticated>
           <Button color="inherit" component={Link} to="/" onClick={logOut}>
             LogOut
