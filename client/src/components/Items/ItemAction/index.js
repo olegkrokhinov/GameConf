@@ -17,11 +17,50 @@ export default function ItemAction({ selectedItem, submitItemAction }) {
 
   const [itemName, setItemName] = useState("");
   const [itemDescription, setItemDescription] = useState("");
+  const [itemType, setItemType] = useState("");
+  const [itemColor, setItemColor] = useState("");
+  const [itemShape, setItemShape] = useState("");
   const [localImageFile, setLocalImageFile] = useState("");
+
+  const fields = [
+    {
+      label: "Item description",
+      value: "itemDescription",
+      placeholder: "Enter item description here",
+      onChange: "handleDescriptionChange",
+    },
+    {
+      label: "Item name",
+      value: "itemName",
+      placeholder: "Enter item name here",
+      onChange: "handleNameChange",
+    },
+    {
+      label: "Item type",
+      value: "itemType",
+      placeholder: "Enter item type here",
+      onChange: "handleTypeChange",
+    },
+    {
+      label: "Item color",
+      value: "itemColor",
+      placeholder: "Enter item color here",
+      onChange: "handleColorChange",
+    },
+    {
+      label: "Item shape",
+      value: "itemShape",
+      placeholder: "Enter item shape here",
+      onChange: "handleShapeChange",
+    },
+  ];
 
   useEffect(() => {
     setItemName(selectedItem ? selectedItem.name : "");
     setItemDescription(selectedItem ? selectedItem.description : "");
+    setItemType(selectedItem ? selectedItem.type : "");
+    setItemColor(selectedItem ? selectedItem.color : "");
+    setItemShape(selectedItem ? selectedItem.shape : "");
     setLocalImageFile(selectedItem ? selectedItem.localImageFile : "");
   }, [selectedItem]);
 
@@ -32,12 +71,27 @@ export default function ItemAction({ selectedItem, submitItemAction }) {
   const handleDescriptionChange = (event) => {
     setItemDescription(event.target.value);
   };
+  
+  const handleTypeChange = (event) => {
+    setItemType(event.target.value);
+  };
+  
+  const handleColorChange = (event) => {
+    setItemColor(event.target.value);
+  };
+  
+  const handleShapeChange = (event) => {
+    setItemShape(event.target.value);
+  };
 
   const saveItem = () => {
     let item = {
       _id: selectedItem?._id,
       name: itemName,
       description: itemDescription,
+      type: itemDescription,
+      color: itemDescription,
+      shape: itemDescription,
       localImageFile: localImageFile,
     };
     submitItemAction(item);
@@ -72,8 +126,6 @@ export default function ItemAction({ selectedItem, submitItemAction }) {
             className={classes.textField}
             id="item-description"
             label="Item description"
-            multiline
-            rows={5}
             value={itemDescription}
             placeholder="Enter item description here"
             onChange={handleDescriptionChange}
@@ -81,6 +133,18 @@ export default function ItemAction({ selectedItem, submitItemAction }) {
             size="small"
           />
         </Grid>
+
+        {fields.map((field, index) => (
+          <TextField
+            className={classes.textField}
+            label={field.label}
+            value={[field.value]}
+            placeholder={field.placeholder}
+            onChange={[field.onChange]}
+            variant="outlined"
+            size="small"
+          />
+        ))}
 
         <Grid item>
           <ItemImage
