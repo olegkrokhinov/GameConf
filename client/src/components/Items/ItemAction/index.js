@@ -22,39 +22,6 @@ export default function ItemAction({ selectedItem, submitItemAction }) {
   const [itemShape, setItemShape] = useState("");
   const [localImageFile, setLocalImageFile] = useState("");
 
-  const fields = [
-    {
-      label: "Item description",
-      value: itemDescription,
-      placeholder: "Enter item description here",
-      onChange: "handleDescriptionChange",
-    },
-    {
-      label: "Item name",
-      value: itemName,
-      placeholder: "Enter item name here",
-      onChange: "handleNameChange",
-    },
-    {
-      label: "Item type",
-      value: itemType,
-      placeholder: "Enter item type here",
-      onChange: "handleTypeChange",
-    },
-    {
-      label: "Item color",
-      value: itemColor,
-      placeholder: "Enter item color here",
-      onChange: "handleColorChange",
-    },
-    {
-      label: "Item shape",
-      value: itemShape,
-      placeholder: "Enter item shape here",
-      onChange: "handleShapeChange",
-    },
-  ];
-
   useEffect(() => {
     setItemName(selectedItem ? selectedItem.name : "");
     setItemDescription(selectedItem ? selectedItem.description : "");
@@ -77,13 +44,45 @@ export default function ItemAction({ selectedItem, submitItemAction }) {
   };
 
   const handleColorChange = (event) => {
-    alert('color')
     setItemColor(event.target.value);
   };
 
   const handleShapeChange = (event) => {
     setItemShape(event.target.value);
   };
+
+  const fieldsForRender = [
+    {
+      label: "Type",
+      value: itemType,
+      placeholder: "Enter item type here",
+      onChange: handleTypeChange,
+    },
+    {
+      label: "Color",
+      value: itemColor,
+      placeholder: "Enter item color here",
+      onChange: handleColorChange,
+    },
+    {
+      label: "Shape",
+      value: itemShape,
+      placeholder: "Enter item shape here",
+      onChange: handleShapeChange,
+    },
+    {
+      label: "Name",
+      value: itemName,
+      placeholder: "Enter item name here",
+      onChange: handleNameChange,
+    },
+    {
+      label: "Description",
+      value: itemDescription,
+      placeholder: "Enter item description here",
+      onChange: handleDescriptionChange,
+    },
+  ];
 
   const saveItem = () => {
     let item = {
@@ -109,40 +108,15 @@ export default function ItemAction({ selectedItem, submitItemAction }) {
         alignItems="stretch"
         className={classes.root}
       >
-        <Grid item>
-          <TextField
-            className={classes.textField}
-            id="item-name"
-            label="Item name"
-            value={itemName}
-            placeholder="Enter item name here"
-            onChange={handleNameChange}
-            variant="outlined"
-            size="small"
-          />
-        </Grid>
 
-        <Grid item>
-          <TextField
-            className={classes.textField}
-            id="item-description"
-            label="Item description"
-            value={itemDescription}
-            placeholder="Enter item description here"
-            onChange={handleDescriptionChange}
-            variant="outlined"
-            size="small"
-          />
-        </Grid>
-
-        {fields.map((field, index) => (
+        {fieldsForRender.map((field, index) => (
           <Grid item>
             <TextField
               className={classes.textField}
               label={field.label}
               value={[field.value]}
               placeholder={field.placeholder}
-              onChange={[field.onChange]}
+              onChange={field.onChange}
               variant="outlined"
               size="small"
             />

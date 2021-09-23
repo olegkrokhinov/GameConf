@@ -65,13 +65,10 @@ export default function ListItem({
         justifyContent="center"
       >
         <Grid item className={classes.content}>
-          <Typography variant="h6">{item.name}</Typography>
+          <Typography>Id: {item._id}</Typography>
         </Grid>
         <Grid item className={classes.content}>
-          <Typography>{item.description}</Typography>
-        </Grid>
-        <Grid item className={classes.content}>
-          <Typography>{item._id}</Typography>
+          <Typography>Name: {item.name}</Typography>
         </Grid>
       </Grid>
     </Grid>
