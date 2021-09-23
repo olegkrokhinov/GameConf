@@ -1,29 +1,14 @@
 import React, { useEffect, useState } from "react";
 
 import { authUser } from "../userAuth";
-import {
-  addAuthStateListener,
-  removeAuthStateListener,
-} from "../userAuthListeners";
+import AuthWrap from "./AuthWrap";
 
 export default function Home({ setAppBarTitle, ...props }) {
-  const [userIsAuthenticated, setUserIsAuthenticated] = useState(
-    Boolean(authUser?.userAccessToken)
-  );
-
-  setAppBarTitle('Home')
-
-  useEffect(() => {
-    addAuthStateListener(setUserIsAuthenticated);
-    return () => {
-      removeAuthStateListener(setUserIsAuthenticated);
-    };
-  }, []);
 
   return (
     <div>
       <h3>Home page</h3>
-      {userIsAuthenticated && (
+      <AuthWrap authenticated>
         <div>
           <div>Hello, {authUser.userLogin}!</div>
           <div>User roles: </div>
@@ -31,10 +16,10 @@ export default function Home({ setAppBarTitle, ...props }) {
             return <div key={index}>{role.name}</div>;
           })}
         </div>
-      )}
-      {!userIsAuthenticated && (
+      </AuthWrap>
+      <AuthWrap>
         <div>Hello Guest! To have acces to items please login.</div>
-      )}
+      </AuthWrap>
     </div>
   );
 }

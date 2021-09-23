@@ -7,41 +7,29 @@ import {
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-import { logOut, authUser } from "../userAuth.js";
-
-import {
-  addAuthStateListener,
-  removeAuthStateListener,
-} from "../userAuthListeners";
+import { logOut } from "../userAuth.js";
+import AuthWrap from "./AuthWrap.js";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
-    title: {
-      flexGrow: 1,
-    },
+  },
+  title: {
+    flexGrow: 1,
   },
 }));
 
 export default function TopBar({ appBarTitle, setDrawer }) {
   const classes = useStyles();
-  const [userIsAuthenticated, setUserIsAuthenticated] = useState(true);
-  // const [userIsAuthenticated, setUserIsAuthenticated] = useState(
-  //   Boolean(authUser?.userAccessToken)
-  // );
-  // useEffect(() => {
-  //   addAuthStateListener(setUserIsAuthenticated);
-  //   return () => removeAuthStateListener(setUserIsAuthenticated);
-  // }, []);
-
+ 
   return (
     <AppBar position="fixed">
-      <Toolbar>
+      <Toolbar className={classes.toolBar}>
         <IconButton
           onClick={() => setDrawer(true)}
           edge="start"
@@ -55,21 +43,19 @@ export default function TopBar({ appBarTitle, setDrawer }) {
           {appBarTitle}
         </Typography>
 
-        {!userIsAuthenticated && (
-          <>
+        <AuthWrap>
             <Button color="inherit" component={Link} to="/register">
               Register
             </Button>
             <Button color="inherit" component={Link} to="/login">
               Login
             </Button>
-          </>
-        )}
-        {userIsAuthenticated && (
+        </AuthWrap>
+        <AuthWrap authenticated>
           <Button color="inherit" component={Link} to="/" onClick={logOut}>
             LogOut
           </Button>
-        )}
+        </AuthWrap>
       </Toolbar>
     </AppBar>
   );

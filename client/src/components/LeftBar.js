@@ -2,31 +2,15 @@ import { ListItem, ListItemText, SwipeableDrawer } from "@material-ui/core";
 import { ListItemIcon } from "@material-ui/core";
 import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
 import ListRoundedIcon from "@material-ui/icons/ListRounded";
-import { makeStyles } from "@material-ui/core/styles";
 
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
-import { logOut, authUser } from "../userAuth";
+import AuthWrap from "./AuthWrap";
 
-import {
-  addAuthStateListener,
-  removeAuthStateListener,
-} from "../userAuthListeners";
 
-const useStyles = makeStyles((theme) => ({}));
 
 export default function LeftBar({ drawer, setDrawer }) {
-  const classes = useStyles();
-  const [userIsAuthenticated, setUserIsAuthenticated] = useState(true);
-
-  // const [userIsAuthenticated, setUserIsAuthenticated] = useState(
-  //   Boolean(authUser?.userAccessToken)
-  // );
-  // useEffect(() => {
-  //   addAuthStateListener(setUserIsAuthenticated);
-  //   return () => removeAuthStateListener(setUserIsAuthenticated);
-  // }, []);
 
   return (
     <SwipeableDrawer
@@ -47,7 +31,7 @@ export default function LeftBar({ drawer, setDrawer }) {
         </ListItemIcon>
         <ListItemText primary="Home" />
       </ListItem>
-      {userIsAuthenticated && (
+      <AuthWrap authenticated>
         <ListItem
           button
           key={2}
@@ -60,7 +44,7 @@ export default function LeftBar({ drawer, setDrawer }) {
           </ListItemIcon>
           <ListItemText primary="Items" />
         </ListItem>
-      )}
+      </AuthWrap>
     </SwipeableDrawer>
   );
 }
