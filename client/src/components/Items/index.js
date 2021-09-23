@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import Item from "./Item";
+import ListItem from "./ListItem";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
-import EditItem from "./EditItem";
-import AddItem from "./AddItem";
 import {
   getItemListFromDb,
-  getItemFromDb,
   deleteItemFromDb,
+  saveItemToDb,
+  addItemToDb,
 } from "./itemFetch";
 import ItemActionHeader from "./ItemActionHeader";
+import ItemAction from "./ItemAction";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,51 +36,72 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Items({ ...props }) {
+export default function Items({ setAppBarTitle, ...props }) {
   const [list, setList] = useState([]);
-  const [itemListNeedUpdate, setItemListNeedUpdate] = useState(true);
-  const [selectedItemId, setSelectedItemId] = useState("");
-  const [itemAction, setItemAction] = useState("");
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [currentAction, setCurrentAction] = useState("");
+  const [selectedItem, setSelectedItem] = useState({});
+  const [saveItemResultMessage, setSaveItemResultMessage] = useState("");
+
+  setAppBarTitle("Items");
 
   const classes = useStyles();
 
-  useEffect(() => {
-    itemListNeedUpdate &&
-      getItemListFromDb()
-        .then((list) => {
-          setList(list);
-          setItemListNeedUpdate(false);
-        })
-        .catch((err) => err.message);
-  }, [itemListNeedUpdate]);
+  useEffect(() => {}, [selectedItem]);
 
-  useEffect(() => {
-    if (itemAction === "add") {
-    } else {
-      getItemFromDb(selectedItemId)
-        .then((item) => setSelectedItem(item))
-        .catch((err) => { });
-    }
-  }, [selectedItemId, itemAction]);
-
-  function handleDeleteItem() {
-    deleteItemFromDb(selectedItem._id)
+  const deleteItem = () => {
+    deleteItemFromDb(selectedItem)
       .then(() => {
-        setItemListNeedUpdate(true);
-        setSelectedItemId("");
-        setItemAction("");
+        setSelectedItem(null);
+        setCurrentAction("");
+        refreshItemsList();
       })
       .catch();
-  }
-
-  const handleAddItem = (event) => {
-    setItemAction("add");
-    setSelectedItemId("");
-    setSelectedItem(null);
   };
-  const handleRefreshItemsList = (event) => {
-    setItemListNeedUpdate(true);
+
+  const addItem = (event) => {
+    setCurrentAction("add");
+  };
+  const refreshItemsList = () => {
+    getItemListFromDb()
+      .then((list) => {
+        setList(list);
+      })
+      .catch((err) => err.message);
+  };
+
+  const listItemClick = (item) => {
+    setSelectedItem(item);
+    setCurrentAction("edit");
+  };
+
+  const saveEditedItem = (item) => {
+    saveItemToDb(item)
+      .then((item) => {
+        setSelectedItem(item);
+        refreshItemsList();
+        setSaveItemResultMessage("Item saved successfully!");
+      })
+      .catch((error) => {
+        setSaveItemResultMessage("Save item catch error: " + error.message);
+      });
+  };
+
+  const saveAddedItem = (item) => {
+    addItemToDb(item)
+      .then((item) => {
+        setSelectedItem(item);
+        refreshItemsList();
+        setCurrentAction("edit");
+        setSaveItemResultMessage("Item saved successfully!");
+      })
+      .catch((error) => {
+        setSaveItemResultMessage("Save item catch error: " + error.message);
+      });
+  };
+
+  const submitItemAction = (item) => {
+    currentAction === "add" && saveAddedItem(item);
+    currentAction === "edit" && saveEditedItem(item);
   };
 
   return (
@@ -91,8 +112,8 @@ export default function Items({ ...props }) {
             item
             container
             direction="column"
-            className={classes.itemsLeft}
             alignItems="flex-start"
+            className={classes.itemsLeft}
           >
             <Grid
               item
@@ -102,12 +123,12 @@ export default function Items({ ...props }) {
               className={classes.itemsList}
             >
               {list.map((item, index) => (
-                <Item
+                <ListItem
                   key={index}
                   item={item}
-                  selectedItemId={selectedItemId}
-                  setSelectedItemId={setSelectedItemId}
-                  setItemAction={setItemAction}
+                  selectedItem={selectedItem}
+                  listItemClick={listItemClick}
+                  setCurrentAction={setCurrentAction}
                 />
               ))}
             </Grid>
@@ -115,7 +136,7 @@ export default function Items({ ...props }) {
             <Grid item container xs spacing={1}>
               <Grid item>
                 <Button
-                  onClick={handleAddItem}
+                  onClick={addItem}
                   variant="outlined"
                   className={classes.button}
                 >
@@ -124,7 +145,7 @@ export default function Items({ ...props }) {
               </Grid>
               <Grid item>
                 <Button
-                  onClick={handleRefreshItemsList}
+                  onClick={refreshItemsList}
                   variant="outlined"
                   className={classes.button}
                 >
@@ -134,29 +155,28 @@ export default function Items({ ...props }) {
             </Grid>
           </Grid>
 
-          <Grid item container xs className={classes.action}
+          <Grid
+            item
+            container
+            xs
+            className={classes.action}
             direction="column"
             justifyContent="flex-start"
             alignItems="stretch"
           >
-            <ItemActionHeader
-              item={selectedItem}
-              itemAction={itemAction}
-              handleDeleteItem={handleDeleteItem}
-            />
-
-            {itemAction === "add" && (
-              <AddItem
-                setSelectedItemId={setSelectedItemId}
-                setItemListNeedUpdate={setItemListNeedUpdate}
-                setItemAction={setItemAction}
-              />
-            )}
-            {itemAction === "edit" && (
-              <EditItem
-                item={selectedItem}
-                setItemListNeedUpdate={setItemListNeedUpdate}
-              />
+            {!(currentAction === "") && (
+              <>
+                <ItemActionHeader
+                  selectedItem={currentAction === "add" ? null : selectedItem}
+                  currentAction={currentAction}
+                  deleteItem={deleteItem}
+                />
+                <ItemAction
+                  selectedItem={currentAction === "add" ? null : selectedItem}
+                  setItem={setSelectedItem}
+                  submitItemAction={submitItemAction}
+                />
+              </>
             )}
           </Grid>
         </Grid>

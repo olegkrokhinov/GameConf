@@ -2,7 +2,7 @@ import { Button, makeStyles } from "@material-ui/core";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import React, { useState, useEffect } from "react";
 
-import { HOST } from '../../../config';
+import { HOST } from "../../../config";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -25,23 +25,24 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function ItemImage({
-  imageUploadPath,
   setLocalImageFile,
+  imageUploadPath,
   onlyImage,
 }) {
   const classes = useStyles();
   const [itemImagePreviewUrl, setItemImagePreviewUrl] = useState();
 
-  function handleItemImageChange(event) {
+  const handleItemImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       let file = event.target.files[0];
       setLocalImageFile(file);
       setItemImagePreviewUrl(URL.createObjectURL(file));
     }
-  }
+  };
 
   useEffect(() => {
-    setItemImagePreviewUrl(HOST+imageUploadPath);
+    imageUploadPath && setItemImagePreviewUrl(HOST + imageUploadPath);
+    !imageUploadPath && setItemImagePreviewUrl("");
   }, [imageUploadPath]);
 
   return (
