@@ -59,6 +59,8 @@ exports.delItem = function (req, res) {
 };
 
 function saveImage(reqfiles) {
+  console.log('saveImage')
+  console.log(reqfiles)
   let uploadPath = "";
   let imageFile = "";
   if (reqfiles) {
@@ -75,5 +77,6 @@ function saveImage(reqfiles) {
       }
     });
   }
+  console.log(uploadPath)
   return uploadPath;
 }

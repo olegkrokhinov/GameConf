@@ -11,6 +11,7 @@ function createFormData(item) {
   formData.append("itemColor", item.color);
   formData.append("itemShape", item.shape);
   formData.append("itemLocalImageFile", item.localImageFile);
+ 
   return formData;
 }
 

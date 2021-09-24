@@ -94,6 +94,7 @@ export default function ItemAction({ selectedItem, submitItemAction }) {
       shape: itemDescription,
       localImageFile: localImageFile,
     };
+    console.log(item)
     submitItemAction(item);
   };
 
