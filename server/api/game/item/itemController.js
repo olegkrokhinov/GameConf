@@ -21,14 +21,18 @@ exports.getItem = function (req, res) {
 };
 
 function fillItemObj(req) {
-  return {
+  itemObj = {
     name: req.body.itemName,
     type: req.body.itemType,
     color: req.body.itemColor,
     shape: req.body.itemShape,
     description: req.body.itemDescription,
-    imageUploadPath: saveImage(req.files),
   };
+  let imageFile = saveImage(req.files);
+  if (imageFile) then 
+      itemObj = { ...itemObj, imageUploadPath: imageFile };
+  
+  return itemObj;
 }
 
 exports.addItem = function (req, res) {
@@ -41,10 +45,12 @@ exports.addItem = function (req, res) {
 };
 
 exports.updItem = function (req, res) {
+  
   model
     .findOneAndUpdate({ _id: req.body.itemId }, { $set: fillItemObj(req) })
     .exec()
     .then((item) => {
+      console.log(item);
       res.status(200).send(item);
     })
     .catch((error) => res.status(500).send(error.message));
@@ -59,8 +65,6 @@ exports.delItem = function (req, res) {
 };
 
 function saveImage(reqfiles) {
-  console.log('saveImage')
-  console.log(reqfiles)
   let uploadPath = "";
   let imageFile = "";
   if (reqfiles) {
@@ -77,6 +81,5 @@ function saveImage(reqfiles) {
       }
     });
   }
-  console.log(uploadPath)
   return uploadPath;
 }

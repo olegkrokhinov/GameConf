@@ -28,7 +28,7 @@ export default function ItemAction({ selectedItem, submitItemAction }) {
     setItemType(selectedItem ? selectedItem.type : "");
     setItemColor(selectedItem ? selectedItem.color : "");
     setItemShape(selectedItem ? selectedItem.shape : "");
-    setLocalImageFile(selectedItem ? selectedItem.localImageFile : "");
+    setLocalImageFile("");
   }, [selectedItem]);
 
   const handleNameChange = (event) => {
@@ -89,12 +89,12 @@ export default function ItemAction({ selectedItem, submitItemAction }) {
       _id: selectedItem?._id,
       name: itemName,
       description: itemDescription,
-      type: itemDescription,
-      color: itemDescription,
-      shape: itemDescription,
+      type: itemType,
+      color: itemColor,
+      shape: itemShape,
       localImageFile: localImageFile,
     };
-    console.log(item)
+    
     submitItemAction(item);
   };
 
@@ -109,7 +109,6 @@ export default function ItemAction({ selectedItem, submitItemAction }) {
         alignItems="stretch"
         className={classes.root}
       >
-
         {fieldsForRender.map((field, index) => (
           <Grid item>
             <TextField

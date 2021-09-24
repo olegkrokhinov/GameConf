@@ -5,6 +5,7 @@ const URL_ITEMS = "/items";
 
 function createFormData(item) {
   const formData = new FormData();
+  formData.append("itemId", item._id);
   formData.append("itemName", item.name);
   formData.append("itemDescription", item.description);
   formData.append("itemType", item.type);

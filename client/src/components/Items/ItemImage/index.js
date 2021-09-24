@@ -30,24 +30,26 @@ export default function ItemImage({
   onlyImage,
 }) {
   const classes = useStyles();
-  const [itemImagePreviewUrl, setItemImagePreviewUrl] = useState();
+  const [imageUrl, setImageUrl] = useState();
 
-  const handleItemImageChange = (event) => {
+  const ImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       let file = event.target.files[0];
       setLocalImageFile(file);
-      setItemImagePreviewUrl(URL.createObjectURL(file));
+      setImageUrl(URL.createObjectURL(file));
     }
   };
 
   useEffect(() => {
-    imageUploadPath && setItemImagePreviewUrl(HOST + imageUploadPath);
-    !imageUploadPath && setItemImagePreviewUrl("");
+    console.log('itemimage useEffect imageUploadPath')
+    console.log(imageUploadPath)
+    imageUploadPath && setImageUrl(HOST + imageUploadPath);
+    !imageUploadPath && setImageUrl("");
   }, [imageUploadPath]);
 
   return (
     <div className={classes.root}>
-      <img src={itemImagePreviewUrl} alt="" className={classes.img}></img>
+      <img src={imageUrl} alt="" className={classes.img}></img>
       {!onlyImage && (
         <>
           <input
@@ -55,7 +57,7 @@ export default function ItemImage({
             className={classes.input}
             id="button-file"
             type="file"
-            onChange={handleItemImageChange}
+            onChange={ImageChange}
           />
           <label htmlFor="button-file">
             <Button
