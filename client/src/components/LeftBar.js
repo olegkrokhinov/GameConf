@@ -29,20 +29,18 @@ export default function LeftBar({ drawer, setDrawer }) {
         <ListItemText primary="Home" />
       </ListItem>
 
-      <AuthWrap authenticated>
-        <ListItem
-          button
-          key={2}
-          component={Link}
-          to="/items"
-          onClick={() => setDrawer(false)}
-        >
-          <ListItemIcon>
-            <ListRoundedIcon />
-          </ListItemIcon>
-          <ListItemText primary="Items" />
-        </ListItem>
-      </AuthWrap>
+      <ListItem
+        button
+        key={2}
+        component={Link}
+        to="/items"
+        onClick={() => setDrawer(false)}
+      >
+        <ListItemIcon>
+          <ListRoundedIcon />
+        </ListItemIcon>
+        <ListItemText primary="Items" />
+      </ListItem>
     </SwipeableDrawer>
   );
 }

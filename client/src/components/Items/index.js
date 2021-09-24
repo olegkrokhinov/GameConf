@@ -46,7 +46,9 @@ export default function Items({ setAppBarTitle, ...props }) {
 
   const classes = useStyles();
 
-  useEffect(() => {}, [selectedItem]);
+  useEffect(() => {
+    refreshItemsList()
+  }, []);
 
   const deleteItem = () => {
     deleteItemFromDb(selectedItem)
@@ -65,6 +67,7 @@ export default function Items({ setAppBarTitle, ...props }) {
     getItemListFromDb()
       .then((list) => {
         setList(list);
+        setSelectedItem((prev) => list.find((item) => item._id === prev?._id));
       })
       .catch((err) => err.message);
   };
@@ -76,8 +79,7 @@ export default function Items({ setAppBarTitle, ...props }) {
 
   const saveEditedItem = (item) => {
     saveItemToDb(item)
-      .then((item) => {
-        setSelectedItem(item);
+      .then(() => {
         refreshItemsList();
         setSaveItemResultMessage("Item saved successfully!");
       })
@@ -90,6 +92,7 @@ export default function Items({ setAppBarTitle, ...props }) {
     addItemToDb(item)
       .then((item) => {
         setSelectedItem(item);
+
         refreshItemsList();
         setCurrentAction("edit");
         setSaveItemResultMessage("Item saved successfully!");

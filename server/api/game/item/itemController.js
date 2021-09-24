@@ -29,8 +29,9 @@ function fillItemObj(req) {
     description: req.body.itemDescription,
   };
   let imageFile = saveImage(req.files);
-  if (imageFile) then 
-      itemObj = { ...itemObj, imageUploadPath: imageFile };
+  if (imageFile) {
+    itemObj = { ...itemObj, imageUploadPath: imageFile };
+  }
   
   return itemObj;
 }
